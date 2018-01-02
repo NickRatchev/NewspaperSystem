@@ -1,0 +1,41 @@
+﻿@model IdentityRoleViewModel
+
+@{
+    ViewData["Title"] = "Manage Roles";
+}
+
+<h2>Manage Roles for user "@Model.Username"</h2>
+
+<div class="container">
+    <form method="post">
+
+        @foreach (var item in Model.AvailableRoles)
+        {
+        <div class="checkbox">
+            <label>
+                @if (Model.SelectedRoles.Contains(item.Value))
+                {
+                    <input type="checkbox"
+                           checked="checked"
+                           name="SelectedRoles"
+                           value="@item.Value" /> @item.Text
+                    }
+                    else
+                    {
+                        <input type="checkbox"
+                               name="SelectedRoles"
+                               value="@item.Value" /> @item.Text
+                        }
+            </label>
+        </div>
+        }
+        <br />
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Confirm Changes</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

@@ -1,0 +1,27 @@
+﻿namespace NewspaperSystem.Data.Models
+{
+	using System;
+
+    public class MaterialConsumption
+    {
+        public int Id { get; set; }
+
+        public DateTime Date { get; set; }
+
+        public decimal PageWidth { get; set; }      // mm
+
+        public decimal PageHeight { get; set; }     // mm
+
+        public decimal Foil { get; set; }           // Kg for 1000 pages
+
+        public decimal Tape { get; set; }           // m for 1000 pages
+
+        public decimal Wischwasser { get; set; }    // Kg for 1000 pages
+
+        public decimal InkBlack { get; set; }       // Kg for 1000 pages
+
+        public decimal InkColor { get; set; }       // Kg for 1000 pages
+
+        public decimal PlateDeveloper { get; set; } // l for 1 plate
+    }
+}
