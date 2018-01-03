@@ -1,0 +1,46 @@
+﻿@model IEnumerable<BaseMaterialServiceModel>
+@{
+    ViewData["Title"] = "Manage Plate Developer";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <h2 class="text-danger">@TempData["SuccessMessage"]</h2>
+}
+
+<br /><br />
+<a class="btn btn-primary btn-lg" asp-area="Materials" asp-controller="Home" asp-action="AddPlateDeveloper">Add new price</a>
+<br /><br /><br />
+
+<table class="table table-hover table-responsive">
+    <thead>
+        <tr style="background: rgb(215,235,255)">
+            <th>Date</th>
+            <th>Price</th>
+            <th>Safety Margin</th>
+            <th>Sell Price</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var material in Model)
+        {
+            <tr>
+                <td>@(String.Format("{0:dd MMM yyyy}", material.Date))</td>
+                <td>@($"{material.Price:F2}") лв. </td>
+                <td>@($"{material.SafetyMargin:F2}") % </td>
+                <td>@($"{material.Price * (1 + material.SafetyMargin / 100):F2}") лв. </td>
+                <td>
+                    <a asp-action="EditPlateDeveloper" asp-route-id="@material.Id" style="width: 130px" class="btn btn-default">Edit Record</a>
+                    <a>&emsp;</a>
+                    <a asp-action="DeletePlateDeveloper" asp-route-id="@material.Id" style="width: 130px" class="btn btn-danger">Delete Record</a>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

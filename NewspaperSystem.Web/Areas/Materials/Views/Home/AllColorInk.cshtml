@@ -1,0 +1,46 @@
+﻿@model IEnumerable<BaseMaterialServiceModel>
+@{
+    ViewData["Title"] = "Manage Color Ink Prices";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <h2 class="text-danger">@TempData["SuccessMessage"]</h2>
+}
+
+<br /><br />
+<a class="btn btn-primary btn-lg" asp-area="Materials" asp-controller="Home" asp-action="AddColorInk">Add new price</a>
+<br /><br /><br />
+
+<table class="table table-hover table-responsive">
+    <thead>
+        <tr style="background: rgb(215,235,255)">
+            <th>Date</th>
+            <th>Price</th>
+            <th>Safety Margin</th>
+            <th>Sell Price</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var colorInk in Model)
+        {
+            <tr>
+                <td>@(String.Format("{0:dd MMM yyyy}", colorInk.Date))</td>
+                <td>@($"{colorInk.Price:F2}") лв. </td>
+                <td>@($"{colorInk.SafetyMargin:F2}") % </td>
+                <td>@($"{colorInk.Price * (1 + colorInk.SafetyMargin / 100):F2}") лв. </td>
+                <td>
+                    <a asp-action="EditColorInk" asp-route-id="@colorInk.Id" style="width: 130px" class="btn btn-default">Edit Record</a>
+                    <a>&emsp;</a>
+                    <a asp-action="DeleteColorInk" asp-route-id="@colorInk.Id" style="width: 130px" class="btn btn-danger">Delete Record</a>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

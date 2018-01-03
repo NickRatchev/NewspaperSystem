@@ -25,8 +25,4 @@
     <ProjectReference Include="..\NewspaperSystem.Services\NewspaperSystem.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Materials\Data\" />
-  </ItemGroup>
-
 </Project>

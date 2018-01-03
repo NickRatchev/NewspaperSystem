@@ -32,6 +32,7 @@
                 <td><input disabled="disabled" type="checkbox" @(paper.IsActive ? "checked" : string.Empty)></td>
                 <td>
                     <a asp-action="EditPaperType" asp-route-id="@paper.Id" style="width: 130px" class="btn btn-default">Edit Paper</a>
+                    <a>&emsp;</a>
                     <a asp-action="DeletePaperType" asp-route-id="@paper.Id" style="width: 130px" class="btn btn-danger">Delete Paper</a>
                     @*<a href="/materials/home/editpapertype/@paper.Id" style="width: 130px" class="btn btn-default">Edit Paper</a>*@
                 </td>
