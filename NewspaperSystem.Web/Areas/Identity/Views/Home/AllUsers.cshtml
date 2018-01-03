@@ -1,0 +1,49 @@
+﻿@model IEnumerable<IdentityListUserServiceModel>
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<h2>Manage Users</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <h2 class="text-danger">@TempData["SuccessMessage"]</h2>
+}
+
+<br /><br />
+<a class="btn btn-primary btn-lg" asp-area="Identity" asp-controller="Home" asp-action="AddUser">Add new user</a>
+<br /><br /><br />
+
+<table class="table table-hover table-responsive">
+    <thead>
+        <tr style="background: rgb(215,235,255)">
+            <th>Username</th>
+            <th>e-mail</th>
+            <th>Full name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Username</td>
+                <td>@user.Email</td>
+                <td>@user.FullName</td>
+                <td>
+                    <a href="/identity/home/edituser/@user.Id" style="width: 90px" class="btn btn-default">Edit</a>
+                    <a>&emsp;</a>
+                    <a href="/identity/home/manageroles/@user.Id" style="width: 90px" class="btn btn-default">Roles</a>
+                    <a>&emsp;</a>
+                    <a href="/identity/home/resetpassword/@user.Id" style="width: 130px" class="btn btn-warning">Reset Password</a>
+                    <a>&emsp;</a>
+                    <a href="/identity/home/deleteuser/@user.Id" style="width: 90px" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

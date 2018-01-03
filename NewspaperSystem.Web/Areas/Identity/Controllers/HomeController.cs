@@ -1,24 +1,25 @@
-﻿namespace NewspaperSystem.Web.Controllers
+﻿namespace NewspaperSystem.Web.Areas.Identity.Controllers
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
     using Data.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
-    using Models.AccountViewModels;
-    using Models.IdentityVewModels;
+    using Models;
     using NewspaperSystem.Services.Identity;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Web.Models.AccountViewModels;
 
+    [Area("Identity")]
     [Authorize(Roles = WebConstants.AdministratorRole)]
-    public class IdentityController : Controller
+    public class HomeController : Controller
     {
         private readonly IIdentityService users;
         private readonly UserManager<User> userManager;
         private readonly RoleManager<User> roleManager;
 
-        public IdentityController(IIdentityService users, UserManager<User> userManager)
+        public HomeController(IIdentityService users, UserManager<User> userManager)
         {
             this.users = users;
             this.userManager = userManager;
@@ -39,7 +40,7 @@
             return View(viewModel);
         }
 
-        
+
         [HttpPost]
         public async Task<IActionResult> ManageRoles(string id, IdentityRoleViewModel model)
         {
@@ -89,13 +90,71 @@
             {
                 UserName = model.Username,
                 FirstName = model.FirstName,
-                LastName = model.Lastname,
+                LastName = model.LastName,
                 Email = model.Email
             }, model.Password);
 
             if (result.Succeeded)
             {
                 this.TempData["SuccessMessage"] = $"User \"{model.Username}\" was successfuly created!";
+                return RedirectToAction(nameof(AllUsers));
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    AddErrors(result);
+                }
+
+                return View(model);
+            }
+        }
+
+        public async Task<IActionResult> EditUser(string id)
+        {
+            var user = await this.userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(new IdentityRegisterViewModel
+                {
+                    Username = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email
+                });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUser(string id, IdentityRegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await this.userManager.FindByIdAsync(id);
+
+            if (user==null)
+            {
+                return NotFound();
+            }
+
+            user.UserName = model.Username;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.Email = model.Email;
+
+            var result = await this.userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                this.TempData["SuccessMessage"] = $"User \"{model.Username}\" was updated successfuly!";
                 return RedirectToAction(nameof(AllUsers));
             }
             else

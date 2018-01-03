@@ -16,7 +16,7 @@
 
         [MinLength(DataConstants.UserNameMinLength)]
         [MaxLength(DataConstants.UserNameMaxLength)]
-        public string Lastname { get; set; }
+        public string LastName { get; set; }
 
         [Required]
         [EmailAddress]

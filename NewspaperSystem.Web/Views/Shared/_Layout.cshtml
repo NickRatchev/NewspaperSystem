@@ -32,24 +32,33 @@
             {
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        
+                        @*<li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>*@
+
                         @if (User.IsInRole(WebConstants.AdministratorRole))
                         {
-                            <li><a asp-area="" asp-controller="Identity" asp-action="AllUsers">Manage Users</a></li>
-
-                            @*<li class="dropdown">
+                            <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    Manage Users
+                                    Materials
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a asp-area="" asp-controller="Identity" asp-action="Create">Create User</a></li>
-                                    <li><a asp-area="" asp-controller="Identity" asp-action="Edit">Edit Users</a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllPaperTypes">Paper Types</a></li>
+                                    @*<li><a asp-area="Materials" asp-controller="Home" asp-action="Paper">Paper</a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="InkColor">Ink Color</a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="InkBlack">Ink Black</a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="Plate">Plates</a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="BlindPlate">Plates Blind</a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="PlateDeveloper">Plate Developer</a></li>*@
                                 </ul>
-                            </li>*@
+                            </li>
+
+                            <li><a asp-area="Identity" asp-controller="Home" asp-action="AllUsers">Users</a></li>
                         }
+
                         @*<li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>*@
                         @*<li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>*@
+
                     </ul>
                     @await Html.PartialAsync("_LoginPartial")
                 </div>

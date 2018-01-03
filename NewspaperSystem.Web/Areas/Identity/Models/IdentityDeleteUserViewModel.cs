@@ -1,4 +1,4 @@
-﻿namespace NewspaperSystem.Web.Models.IdentityVewModels
+﻿namespace NewspaperSystem.Web.Areas.Identity.Models
 {
     public class IdentityDeleteUserViewModel
     {

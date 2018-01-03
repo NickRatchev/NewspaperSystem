@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace NewspaperSystem.Web.Models.ManageViewModels
+﻿namespace NewspaperSystem.Web.Models.AccountViewModels
 {
     using Data;
+    using System.ComponentModel.DataAnnotations;
 
-    public class IndexViewModel
+    public class IdentityRegisterViewModel
     {
+        [Required]
+        [MinLength(DataConstants.UserNameMinLength)]
+        [MaxLength(DataConstants.UserNameMaxLength)]
         public string Username { get; set; }
-
-        public bool IsEmailConfirmed { get; set; }
 
         [MinLength(DataConstants.UserNameMinLength)]
         [MaxLength(DataConstants.UserNameMaxLength)]
@@ -24,12 +20,7 @@ namespace NewspaperSystem.Web.Models.ManageViewModels
 
         [Required]
         [EmailAddress]
+        [Display(Name = "Email")]
         public string Email { get; set; }
-
-        [Phone]
-        [Display(Name = "Phone number")]
-        public string PhoneNumber { get; set; }
-
-        public string StatusMessage { get; set; }
     }
 }

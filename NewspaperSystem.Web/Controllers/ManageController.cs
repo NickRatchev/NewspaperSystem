@@ -56,7 +56,7 @@
             {
                 Username = user.UserName,
                 FirstName = user.FirstName,
-                Lastname = user.LastName,
+                LastName = user.LastName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 IsEmailConfirmed = user.EmailConfirmed,
@@ -102,10 +102,10 @@
                 }
             }
 
-            if (user.FirstName!=model.FirstName || user.LastName!=model.Lastname)
+            if (user.FirstName!=model.FirstName || user.LastName!=model.LastName)
             {
                 user.FirstName = model.FirstName;
-                user.LastName = model.Lastname;
+                user.LastName = model.LastName;
                 await this._userManager.UpdateAsync(user);
             }
 

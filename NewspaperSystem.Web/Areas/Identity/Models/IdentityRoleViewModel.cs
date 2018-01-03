@@ -1,4 +1,4 @@
-﻿namespace NewspaperSystem.Web.Models.IdentityVewModels
+﻿namespace NewspaperSystem.Web.Areas.Identity.Models
 {
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Mvc.Rendering;

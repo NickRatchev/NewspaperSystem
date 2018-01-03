@@ -26,11 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\" />
-    <Folder Include="Areas\Materials\Controllers\" />
     <Folder Include="Areas\Materials\Data\" />
-    <Folder Include="Areas\Materials\Models\" />
-    <Folder Include="Areas\Materials\Views\" />
   </ItemGroup>
 
 </Project>

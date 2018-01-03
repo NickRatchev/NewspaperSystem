@@ -55,7 +55,7 @@
 //                {
 //                    UserName = model.User.Username,
 //                    FirstName = model.User.FirstName,
-//                    LastName = model.User.Lastname,
+//                    LastName = model.User.LastName,
 //                    Email = model.User.Email
 //                };
 //                var result = await _userManager.CreateAsync(user, model.User.Password);

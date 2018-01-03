@@ -1,0 +1,45 @@
+﻿@model IEnumerable<PaperTypeListServiceModel>
+@{
+    ViewData["Title"] = "Manage Paper Types";
+}
+
+<h2>Manage Paper Types</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <h2 class="text-danger">@TempData["SuccessMessage"]</h2>
+}
+
+<br /><br />
+<a class="btn btn-primary btn-lg" asp-area="Materials" asp-controller="Home" asp-action="AddPaperType">Add new paper</a>
+<br /><br /><br />
+
+<table class="table table-hover table-responsive">
+    <thead>
+        <tr style="background: rgb(215,235,255)">
+            <th>Name</th>
+            <th>Grammage</th>
+            <th>Is Active</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var paper in Model)
+        {
+            <tr>
+                <td>@paper.Name</td>
+                <td>@($"{paper.Grammage:F1}") гр.</td>
+                <td><input disabled="disabled" type="checkbox" @(paper.IsActive ? "checked" : string.Empty)></td>
+                <td>
+                    <a asp-action="EditPaperType" asp-route-id="@paper.Id" style="width: 130px" class="btn btn-default">Edit Paper</a>
+                    <a asp-action="DeletePaperType" asp-route-id="@paper.Id" style="width: 130px" class="btn btn-danger">Delete Paper</a>
+                    @*<a href="/materials/home/editpapertype/@paper.Id" style="width: 130px" class="btn btn-default">Edit Paper</a>*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

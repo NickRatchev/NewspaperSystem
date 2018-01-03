@@ -15,11 +15,11 @@
             this.db = db;
         }
 
-        public IEnumerable<IdentityListUserViewModel> AllUsers()
+        public IEnumerable<IdentityListUserServiceModel> AllUsers()
         {
             var result = this.db
                 .Users
-                .ProjectTo<IdentityListUserViewModel>()
+                .ProjectTo<IdentityListUserServiceModel>()
                 .ToList()
                 .OrderBy(u=>u.Username);
 

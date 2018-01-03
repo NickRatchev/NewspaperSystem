@@ -6,6 +6,6 @@
 
     public interface IIdentityService : IService
     {
-        IEnumerable<IdentityListUserViewModel> AllUsers();
+        IEnumerable<IdentityListUserServiceModel> AllUsers();
     }
 }

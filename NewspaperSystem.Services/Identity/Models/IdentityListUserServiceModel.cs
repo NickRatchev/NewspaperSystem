@@ -4,7 +4,7 @@
     using Common.Mapping;
     using Data.Models;
 
-    public class IdentityListUserViewModel : IMapFrom<User>
+    public class IdentityListUserServiceModel : IMapFrom<User>
     {
         public string Id { get; set; }
 
