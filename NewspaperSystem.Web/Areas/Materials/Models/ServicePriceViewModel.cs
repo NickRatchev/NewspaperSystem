@@ -1,13 +1,15 @@
-﻿namespace NewspaperSystem.Data.Models
+﻿using System;
+
+namespace NewspaperSystem.Web.Areas.Materials.Models
 {
-	using System;
-	using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations;
+    using Common.Mapping;
+    using Data.Models;
 
-    public class ServicePrice
+    public class ServicePriceViewModel : IMapFrom<ServicePriceServiceModel>
     {
-        public int Id { get; set; }
-
         [Required]
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
         [Required]

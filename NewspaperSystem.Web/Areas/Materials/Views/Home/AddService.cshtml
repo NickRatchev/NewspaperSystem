@@ -1,0 +1,9 @@
+﻿@model ServicePriceViewModel
+@{
+    ViewData["Title"] = "Add Service Prices";
+    ViewData["SubmitButton"] = "Add Prices";
+    ViewData["CancelAction"] = "AllService";
+}
+
+@Html.Partial("_ServiceForm", Model)
+

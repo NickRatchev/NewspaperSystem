@@ -1,6 +1,6 @@
-﻿@model IEnumerable<BaseMaterialServiceModel>
+﻿@model IEnumerable<PaperServiceModel>
 @{
-    ViewData["Title"] = "Manage Blind Plate Prices";
+    ViewData["Title"] = "Manage Papers Prices";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -11,12 +11,13 @@
 }
 
 <br /><br />
-<a class="btn btn-primary btn-lg" asp-area="Materials" asp-controller="Home" asp-action="AddBlindPlate">Add new price</a>
+<a class="btn btn-primary btn-lg" asp-area="Materials" asp-controller="Home" asp-action="AddPaper">Add New Price</a>
 <br /><br /><br />
 
 <table class="table table-hover table-responsive">
     <thead>
         <tr style="background: rgb(215,235,255)">
+            <th>Paper Type</th>
             <th>Date</th>
             <th>Price</th>
             <th>Safety Margin</th>
@@ -28,14 +29,15 @@
         @foreach (var material in Model)
         {
             <tr>
+                <th>@($"{material.PaperTypeName}")</th>
                 <td>@(String.Format("{0:dd MMM yyyy}", material.Date))</td>
                 <td>@($"{material.Price:F2}") лв. </td>
-                <td>@($"{material.SafetyMargin:F2}") % </td>
+                <td>@($"{material.SafetyMargin:F3}") % </td>
                 <td>@($"{material.Price * (1 + material.SafetyMargin / 100):F2}") лв. </td>
                 <td>
-                    <a asp-action="EditBlindPlate" asp-route-id="@material.Id" style="width: 130px" class="btn btn-default">Edit Record</a>
+                    <a asp-action="EditPaper" asp-route-id="@material.Id" style="width: 130px" class="btn btn-default">Edit Record</a>
                     <a>&emsp;</a>
-                    <a asp-action="DeleteBlindPlate" asp-route-id="@material.Id" style="width: 130px" class="btn btn-danger">Delete Record</a>
+                    <a asp-action="DeletePaper" asp-route-id="@material.Id" style="width: 130px" class="btn btn-danger">Delete Record</a>
                 </td>
             </tr>
         }

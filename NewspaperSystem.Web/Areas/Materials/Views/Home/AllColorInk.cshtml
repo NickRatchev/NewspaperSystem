@@ -30,12 +30,13 @@
             <tr>
                 <td>@(String.Format("{0:dd MMM yyyy}", colorInk.Date))</td>
                 <td>@($"{colorInk.Price:F2}") лв. </td>
-                <td>@($"{colorInk.SafetyMargin:F2}") % </td>
+                <td>@($"{colorInk.SafetyMargin:F3}") % </td>
                 <td>@($"{colorInk.Price * (1 + colorInk.SafetyMargin / 100):F2}") лв. </td>
                 <td>
                     <a asp-action="EditColorInk" asp-route-id="@colorInk.Id" style="width: 130px" class="btn btn-default">Edit Record</a>
                     <a>&emsp;</a>
                     <a asp-action="DeleteColorInk" asp-route-id="@colorInk.Id" style="width: 130px" class="btn btn-danger">Delete Record</a>
+                </td>
             </tr>
         }
     </tbody>

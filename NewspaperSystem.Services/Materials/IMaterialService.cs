@@ -3,20 +3,21 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Data.Models;
     using Data.Models.Materials;
     using Models;
 
     public interface IMaterialService
     {
         // Paper Type
-        IEnumerable<PaperTypeListServiceModel> AllPaperTypes();
+        IEnumerable<PaperTypeServiceModel> AllPaperTypes();
 
         Task AddPaperTypeAsync(
             string name,
             decimal grammage,
             bool isActive);
 
-        PaperTypeListServiceModel GetPaperTypeById(int id);
+        PaperTypeServiceModel GetPaperTypeById(int id);
 
         Task EditPaperTypeAsync(
             int id,
@@ -27,6 +28,27 @@
         bool PaperTypeIsUsed(int id);
 
         Task DeletePaperTypeAsync(int id);
+
+        // Paper
+        IEnumerable<PaperServiceModel> AllPapers();
+
+        Task AddPaperAsync(
+            DateTime date,
+            int paperTypeId,
+            decimal price,
+            decimal safetyMargin);
+
+        PaperServiceModel GetPaperById(int id);
+
+        Task EditPaperAsync(
+            int id,
+            DateTime date,
+            int paperTypeId,
+            decimal price,
+            decimal safetyMargin);
+
+        Task DeletePaperAsync(int id);
+
 
         // Color Ink
         IEnumerable<BaseMaterialServiceModel> AllColorInks();
@@ -171,5 +193,57 @@
             decimal safetyMargin);
 
         Task DeleteTapeAsync(int id);
+
+        // Service Prices
+        IEnumerable<ServicePriceServiceModel> AllServices();
+
+        Task AddServiceAsync(
+            DateTime date,
+            decimal plateExposing,
+            decimal machineSetup,
+            decimal impression,
+            decimal packing);
+
+        ServicePriceServiceModel GetServiceById(int id);
+
+        Task EditServiceAsync(
+            int id,
+            DateTime date,
+            decimal plateExposing,
+            decimal machineSetup,
+            decimal impression,
+            decimal packing);
+
+        Task DeleteServiceAsync(int id);
+
+        // Material Consumptions
+        IEnumerable<MaterialConsumptionServiceModel> AllConsumptions();
+
+        Task AddConsumptionAsync(
+            DateTime date,
+            decimal pageWidth,
+            decimal pageHeight,
+            decimal foil,
+            decimal tape,
+            decimal wischwasser,
+            decimal inkBlack,
+            decimal inkColor,
+            decimal plateDeveloper);
+
+        MaterialConsumptionServiceModel GetConsumptionById(int id);
+
+        Task EditConsumptionAsync(
+            int id,
+            DateTime date,
+            decimal pageWidth,
+            decimal pageHeight,
+            decimal foil,
+            decimal tape,
+            decimal wischwasser,
+            decimal inkBlack,
+            decimal inkColor,
+            decimal plateDeveloper);
+
+        Task DeleteConsumptionAsync(int id);
     }
 }

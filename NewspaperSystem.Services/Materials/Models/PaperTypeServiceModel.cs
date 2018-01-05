@@ -3,7 +3,7 @@
     using Common.Mapping;
     using Data.Models.Materials;
 
-    public class PaperTypeListServiceModel : IMapFrom<PaperType>
+    public class PaperTypeServiceModel : IMapFrom<PaperType>
     {
         public int Id { get; set; }
 

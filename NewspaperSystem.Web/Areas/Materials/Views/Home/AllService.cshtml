@@ -1,0 +1,49 @@
+﻿@model IEnumerable<ServicePriceServiceModel>
+@{
+    ViewData["Title"] = "Manage Service prices";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <h2 class="text-danger">@TempData["SuccessMessage"]</h2>
+}
+
+<br /><br />
+<a class="btn btn-primary btn-lg" asp-area="Materials" asp-controller="Home" asp-action="AddService">Add New Service Prices</a>
+<br /><br /><br />
+
+<table class="table table-hover table-responsive">
+    <thead>
+        <tr style="background: rgb(215,235,255)">
+            <th>Date</th>
+            <th>Plate exposing</th>
+            <th>Machine setup</th>
+            <th>Impression</th>
+            <th>Packing</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var service in Model)
+        {
+            <tr>
+                <td>@(String.Format("{0:dd MMM yyyy}", service.Date))</td>
+                <td>@($"{service.PlateExposing:F2}") лв. </td>
+                <td>@($"{service.MachineSetup:F2}") лв. </td>
+                <td>@($"{service.Impression:F3}") лв. </td>
+                <td>@($"{service.Packing:F3}") лв. </td>
+                <td>
+                    <a asp-action="EditService" asp-route-id="@service.Id" style="width: 130px" class="btn btn-default">Edit Record</a>
+                    <a>&emsp;</a>
+                    <a asp-action="DeleteService" asp-route-id="@service.Id" style="width: 130px" class="btn btn-danger">Delete Record</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

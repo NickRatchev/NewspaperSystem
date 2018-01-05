@@ -5,7 +5,7 @@
     using Data;
     using NewspaperSystem.Services.Materials.Models;
 
-    public class PaperTypeViewModel : IMapFrom<PaperTypeListServiceModel>
+    public class PaperTypeViewModel : IMapFrom<PaperTypeServiceModel>
     {
         [Required]
         [StringLength(DataConstants.PaperNameMaxLength, MinimumLength = DataConstants.PaperNameMinLength)]

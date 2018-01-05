@@ -1,10 +1,14 @@
 ﻿namespace NewspaperSystem.Web.Areas.Materials.Controllers
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
+    using Data.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using Models;
     using NewspaperSystem.Services.Materials;
     using NewspaperSystem.Services.Materials.Models;
@@ -67,7 +71,7 @@
                 return View(model);
             }
 
-            var paperType = new PaperTypeListServiceModel()
+            var paperType = new PaperTypeServiceModel()
             {
                 Name = model.Name,
                 Grammage = model.Grammage,
@@ -87,7 +91,7 @@
         {
             var paperType = this.materials.GetPaperTypeById(id);
 
-            if (paperType==null)
+            if (paperType == null)
             {
                 return NotFound();
                 return View(AllColorInk());
@@ -125,6 +129,121 @@
                     $"The paper \"{paperType.Name} - {paperType.Grammage} гр.\" was deleted!";
 
                 return RedirectToAction(nameof(AllPaperTypes));
+            }
+        }
+
+        #endregion
+
+        #region Paper
+
+        public IActionResult AllPaper()
+        {
+            var debug = this.materials.AllPapers();
+            return View(this.materials.AllPapers());
+        }
+
+        public IActionResult AddPaper()
+        {
+            var paperTypes = GetAllPaperTypes();
+
+            return View(new PaperViewModel()
+            {
+                Date = DateTime.UtcNow,
+                PaperTypes = paperTypes
+            });
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddPaper(PaperViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var paperTypes = GetAllPaperTypes();
+
+                model.PaperTypes = paperTypes;
+
+                return View(model);
+            }
+
+            await this.materials.AddPaperAsync(
+                model.Date,
+                model.PaperTypeId,
+                model.Price,
+                model.SafetyMargin);
+
+            return RedirectToAction(nameof(AllPaper));
+        }
+
+        public IActionResult EditPaper(int id)
+        {
+            var material = this.materials.GetPaperById(id);
+
+            if (material == null)
+            {
+                return NotFound();
+            }
+
+            var paperTypes = GetAllPaperTypes();
+            var model = Mapper.Map<PaperViewModel>(material);
+
+            model.PaperTypes = paperTypes;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult EditPaper(int id, PaperViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var paperTypes = GetAllPaperTypes();
+
+                model.PaperTypes = paperTypes;
+
+                return View(model);
+            }
+
+            this.materials.EditPaperAsync(
+                id,
+                model.Date,
+                model.PaperTypeId,
+                model.Price,
+                model.SafetyMargin);
+
+            return RedirectToAction(nameof(AllPaper));
+        }
+
+        public async Task<IActionResult> DeletePaper(int id)
+        {
+            var material = this.materials.GetPaperById(id);
+
+            if (material == null)
+            {
+                return NotFound();
+            }
+
+            return View(new PaperDeleteViewModel()
+            {
+                Id = id
+            });
+        }
+
+        public async Task<IActionResult> DestroyPaper(int id)
+        {
+            var material = this.materials.GetPaperById(id);
+
+            if (material == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                await this.materials.DeletePaperAsync(id);
+
+                this.TempData["SuccessMessage"] = $"Selected paper was successfuly deleted!";
+
+                return RedirectToAction(nameof(AllPaper));
             }
         }
 
@@ -881,5 +1000,224 @@
         }
 
         #endregion
+
+        #region Service Prices
+
+        public IActionResult AllService()
+        {
+            return View(this.materials.AllServices());
+        }
+
+        public IActionResult AddService() => View(new ServicePriceViewModel()
+        {
+            Date = DateTime.UtcNow
+        });
+
+        [HttpPost]
+        public async Task<IActionResult> AddService(ServicePriceViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await this.materials.AddServiceAsync(
+                model.Date,
+                model.PlateExposing,
+                model.MachineSetup,
+                model.Impression,
+                model.Packing);
+
+            return RedirectToAction(nameof(AllService));
+        }
+
+        public IActionResult EditService(int id)
+        {
+            var servicePrice = this.materials.GetServiceById(id);
+
+            if (servicePrice == null)
+            {
+                return NotFound();
+            }
+
+            var model = Mapper.Map<ServicePriceViewModel>(servicePrice);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult EditService(int id, ServicePriceViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            this.materials.EditServiceAsync(
+                id,
+                model.Date,
+                model.PlateExposing,
+                model.MachineSetup,
+                model.Impression,
+                model.Packing);
+
+            return RedirectToAction(nameof(AllService));
+        }
+
+        public async Task<IActionResult> DeleteService(int id)
+        {
+            var servicePrice = this.materials.GetServiceById(id);
+
+            if (servicePrice == null)
+            {
+                return NotFound();
+            }
+
+            return View(new ServicePriceDeleteViewModel()
+            {
+                Id = id
+            });
+        }
+
+        public async Task<IActionResult> DestroyService(int id)
+        {
+            var servicePrice = this.materials.GetServiceById(id);
+
+            if (servicePrice == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                await this.materials.DeleteServiceAsync(id);
+
+                this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
+
+                return RedirectToAction(nameof(AllService));
+            }
+        }
+
+        #endregion
+
+        #region Material Consumption
+
+        public IActionResult AllConsumption()
+        {
+            return View(this.materials.AllConsumptions());
+        }
+
+        public IActionResult AddConsumption() => View(new MaterialConsumptionViewModel()
+        {
+            Date = DateTime.UtcNow
+        });
+
+        [HttpPost]
+        public async Task<IActionResult> AddConsumption(MaterialConsumptionViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await this.materials.AddConsumptionAsync(
+                model.Date,
+                model.PageWidth,
+                model.PageHeight,
+                model.Foil,
+                model.Tape,
+                model.Wischwasser,
+                model.InkBlack,
+                model.InkColor,
+                model.PlateDeveloper);
+
+            return RedirectToAction(nameof(AllConsumption));
+        }
+
+        public IActionResult EditConsumption(int id)
+        {
+            var consumptionPrice = this.materials.GetConsumptionById(id);
+
+            if (consumptionPrice == null)
+            {
+                return NotFound();
+            }
+
+            var model = Mapper.Map<MaterialConsumptionViewModel>(consumptionPrice);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult EditConsumption(int id, MaterialConsumptionViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            this.materials.EditConsumptionAsync(
+                id,
+                model.Date,
+                model.PageWidth,
+                model.PageHeight,
+                model.Foil,
+                model.Tape,
+                model.Wischwasser,
+                model.InkBlack,
+                model.InkColor,
+                model.PlateDeveloper);
+
+            return RedirectToAction(nameof(AllConsumption));
+        }
+
+        public async Task<IActionResult> DeleteConsumption(int id)
+        {
+            var consumptionPrice = this.materials.GetConsumptionById(id);
+
+            if (consumptionPrice == null)
+            {
+                return NotFound();
+            }
+
+            return View(new MaterialConsumptionDeleteModel()
+            {
+                Id = id
+            });
+        }
+
+        public async Task<IActionResult> DestroyConsumption(int id)
+        {
+            var consumptionPrice = this.materials.GetConsumptionById(id);
+
+            if (consumptionPrice == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                await this.materials.DeleteConsumptionAsync(id);
+
+                this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
+
+                return RedirectToAction(nameof(AllConsumption));
+            }
+        }
+
+        #endregion
+
+        private IList<SelectListItem> GetAllPaperTypes()
+        {
+            var result = this.materials.AllPaperTypes()
+                .Where(pt => pt.IsActive)
+                .Select(pt => new SelectListItem()
+                {
+                    Text = $"{pt.Name} {pt.Grammage} гр.",
+                    Value = pt.Id.ToString()
+                })
+                .OrderBy(r => r.Text)
+                .ToList();
+
+            return result;
+        }
     }
 }

@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using AutoMapper.QueryableExtensions;
     using Data;
+    using Data.Models;
     using Data.Models.Materials;
     using Models;
 
@@ -20,11 +21,12 @@
         }
 
         #region PaperType
-        public IEnumerable<PaperTypeListServiceModel> AllPaperTypes()
+
+        public IEnumerable<PaperTypeServiceModel> AllPaperTypes()
         {
             var result = this.db
                 .PaperTypes
-                .ProjectTo<PaperTypeListServiceModel>()
+                .ProjectTo<PaperTypeServiceModel>()
                 .ToList()
                 .OrderByDescending(pt => pt.IsActive)
                 .ThenBy(pt => pt.Name);
@@ -47,17 +49,17 @@
             await this.db.SaveChangesAsync();
         }
 
-        public PaperTypeListServiceModel GetPaperTypeById(int id)
+        public PaperTypeServiceModel GetPaperTypeById(int id)
         {
             var result = this.db.PaperTypes
-                .ProjectTo<PaperTypeListServiceModel>()
+                .ProjectTo<PaperTypeServiceModel>()
                 .FirstOrDefault(pt => pt.Id == id);
 
             return result;
         }
 
         public async Task EditPaperTypeAsync(
-            int id, 
+            int id,
             string name,
             decimal grammage,
             bool isActive)
@@ -87,12 +89,99 @@
         }
         #endregion
 
+        #region Paper
+        public IEnumerable<PaperServiceModel> AllPapers()
+        {
+            var result = this.db.Papers
+                .Where(p => p.PaperType.IsActive)
+                .Select(p => new PaperServiceModel()
+                {
+                    Id = p.Id,
+                    Date = p.Date,
+                    PaperTypeId = p.PaperTypeId,
+                    PaperTypeName = $"{p.PaperType.Name} {p.PaperType.Grammage:F1}",
+                    Price = p.Price,
+                    SafetyMargin = p.SafetyMargin
+                })
+                .ToList()
+                .OrderBy(p => p.PaperTypeName)
+                .ThenBy(p => p.Date);
+
+            return result;
+        }
+
+        public async Task AddPaperAsync(
+            DateTime date,
+            int paperTypeId,
+            decimal price,
+            decimal safetyMargin)
+        {
+            this.db.Papers.Add(new Paper()
+            {
+                Date = date,
+                PaperTypeId = paperTypeId,
+                Price = price,
+                SafetyMargin = safetyMargin
+            });
+
+            await this.db.SaveChangesAsync();
+        }
+
+        public PaperServiceModel GetPaperById(int id)
+        {
+            var resultold = this.db.Papers
+                .ProjectTo<PaperServiceModel>()
+                .FirstOrDefault(pt => pt.Id == id);
+
+            var result = this.db.Papers
+                .Where(p => p.Id == id)
+                .Select(p => new PaperServiceModel()
+                {
+                    Id = p.Id,
+                    Date = p.Date,
+                    PaperTypeId = p.PaperTypeId,
+                    PaperTypeName = $"{p.PaperType.Name} {p.PaperType.Grammage} гр.",
+                    Price = p.Price,
+                    SafetyMargin = p.SafetyMargin
+                })
+                .FirstOrDefault();
+
+            return result;
+        }
+
+        public async Task EditPaperAsync(
+            int id,
+            DateTime date,
+            int paperTypeId,
+            decimal price,
+            decimal safetyMargin)
+        {
+            var material = this.db.Papers
+                .FirstOrDefault(m => m.Id == id);
+
+            material.Date = date;
+            material.PaperTypeId = paperTypeId;
+            material.Price = price;
+            material.SafetyMargin = safetyMargin;
+
+            await this.db.SaveChangesAsync();
+        }
+
+        public async Task DeletePaperAsync(int id)
+        {
+            var material = this.db.Papers.FirstOrDefault(m => m.Id == id);
+            this.db.Papers.Remove(material);
+            await this.db.SaveChangesAsync();
+        }
+
+        #endregion
+
         #region ColorInk
         public IEnumerable<BaseMaterialServiceModel> AllColorInks()
         {
             var result = this.db
                 .ColorInks
-                .ProjectTo <BaseMaterialServiceModel> ()
+                .ProjectTo<BaseMaterialServiceModel>()
                 .ToList()
                 .OrderBy(m => m.Date);
 
@@ -124,9 +213,9 @@
         }
 
         public async Task EditColorInkAsync(
-            int id, 
-            DateTime date, 
-            decimal price, 
+            int id,
+            DateTime date,
+            decimal price,
             decimal safetyMargin)
         {
             var material = this.db.ColorInks
@@ -580,6 +669,161 @@
             await this.db.SaveChangesAsync();
         }
 
+
+        #endregion
+
+        #region Service Prices
+        public IEnumerable<ServicePriceServiceModel> AllServices()
+        {
+            var result = this.db
+                .ServicePrices
+                .ProjectTo<ServicePriceServiceModel>()
+                .ToList()
+                .OrderBy(m => m.Date);
+
+            return result;
+        }
+
+        public async Task AddServiceAsync(
+            DateTime date,
+            decimal plateExposing,
+            decimal machineSetup,
+            decimal impression,
+            decimal packing)
+        {
+            this.db.ServicePrices.Add(new ServicePrice()
+            {
+                Date = date,
+                PlateExposing = plateExposing,
+                MachineSetup = machineSetup,
+                Impression = impression,
+                Packing = packing
+            });
+
+            await this.db.SaveChangesAsync();
+        }
+
+        public ServicePriceServiceModel GetServiceById(int id)
+        {
+            var result = this.db.ServicePrices
+                .ProjectTo<ServicePriceServiceModel>()
+                .FirstOrDefault(pt => pt.Id == id);
+
+            return result;
+        }
+
+        public async Task EditServiceAsync(
+            int id,
+            DateTime date,
+            decimal plateExposing,
+            decimal machineSetup,
+            decimal impression,
+            decimal packing)
+        {
+            var material = this.db.ServicePrices
+                .FirstOrDefault(m => m.Id == id);
+
+            material.Date = date;
+            material.PlateExposing = plateExposing;
+            material.MachineSetup = machineSetup;
+            material.Impression = impression;
+            material.Packing = packing;
+
+            await this.db.SaveChangesAsync();
+        }
+
+        public async Task DeleteServiceAsync(int id)
+        {
+            var material = this.db.ServicePrices.FirstOrDefault(m => m.Id == id);
+            this.db.ServicePrices.Remove(material);
+            await this.db.SaveChangesAsync();
+        }
+
+        #endregion
+
+        #region Material Consumption
+
+        public IEnumerable<MaterialConsumptionServiceModel> AllConsumptions()
+        {
+            var result = this.db
+                .MaterialConsumptions
+                .ProjectTo<MaterialConsumptionServiceModel>()
+                .ToList()
+                .OrderBy(m => m.Date);
+
+            return result;
+        }
+
+        public async Task AddConsumptionAsync(
+            DateTime date,
+            decimal pageWidth,
+            decimal pageHeight,
+            decimal foil,
+            decimal tape,
+            decimal wischwasser,
+            decimal inkBlack,
+            decimal inkColor,
+            decimal plateDeveloper)
+        {
+            this.db.MaterialConsumptions.Add(new MaterialConsumption()
+            {
+                Date = date,
+                PageWidth = pageWidth,
+                PageHeight = pageHeight,
+                Foil = foil,
+                Tape = tape,
+                Wischwasser = wischwasser,
+                InkBlack = inkBlack,
+                InkColor = inkColor,
+                PlateDeveloper = plateDeveloper
+            });
+
+            await this.db.SaveChangesAsync();
+        }
+
+        public MaterialConsumptionServiceModel GetConsumptionById(int id)
+        {
+            var result = this.db.MaterialConsumptions
+                .ProjectTo<MaterialConsumptionServiceModel>()
+                .FirstOrDefault(pt => pt.Id == id);
+
+            return result;
+        }
+
+        public async Task EditConsumptionAsync(
+            int id,
+            DateTime date,
+            decimal pageWidth,
+            decimal pageHeight,
+            decimal foil,
+            decimal tape,
+            decimal wischwasser,
+            decimal inkBlack,
+            decimal inkColor,
+            decimal plateDeveloper)
+        {
+            var material = this.db.MaterialConsumptions
+                .FirstOrDefault(m => m.Id == id);
+
+            material.Date = date;
+            material.PageWidth = pageWidth;
+            material.PageHeight = pageHeight;
+            material.Foil = foil;
+            material.Tape = tape;
+            material.Wischwasser = wischwasser;
+            material.InkBlack = inkBlack;
+            material.InkColor = inkColor;
+            material.PlateDeveloper = plateDeveloper;
+
+            await this.db.SaveChangesAsync();
+        }
+
+        public async Task DeleteConsumptionAsync(int id)
+        {
+            var material = this.db.MaterialConsumptions.FirstOrDefault(m => m.Id == id);
+            this.db.MaterialConsumptions.Remove(material);
+            await this.db.SaveChangesAsync();
+        }
 
         #endregion
     }

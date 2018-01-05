@@ -2,12 +2,14 @@
 {
 	using System;
 	using System.ComponentModel.DataAnnotations;
+	using Common.Mapping;
 
-    public class MaterialConsumption
+    public class MaterialConsumptionViewModel : IMapFrom<MaterialConsumptionServiceModel>
     {
         public int Id { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
         [Required]

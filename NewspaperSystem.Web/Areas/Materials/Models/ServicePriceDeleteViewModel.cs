@@ -1,8 +1,8 @@
 ﻿namespace NewspaperSystem.Web.Areas.Materials.Models
 {
     using Common.Mapping;
-    using NewspaperSystem.Services.Materials.Models;
-    public class PaperTypeDeleteViewModel : IMapFrom<PaperTypeServiceModel>
+    using Data.Models;
+    public class ServicePriceDeleteViewModel : IMapFrom<ServicePriceServiceModel>
     {
         public int Id { get; set; }
     }

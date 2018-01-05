@@ -12,13 +12,13 @@
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Price"> (BGN)</label>
-                <input asp-for="Price" type="number" class="form-control" min="0" step="0.01" />
+                <label asp-for="Price">Price (BGN)</label>
+                <input asp-for="Price" type="number" class="form-control" min="0" step="0.0001" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SafetyMargin">SafetyMargin (%)</label>
-                <input asp-for="SafetyMargin" type="number" class="form-control" min="0" max="100" step="0.01" />
+                <input asp-for="SafetyMargin" type="number" class="form-control" min="0" max="100" step="0.001" />
                 <span asp-validation-for="SafetyMargin" class="text-danger"></span>
             </div>
             <br />

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<MaterialConsumptionServiceModel>
+@{
+    ViewData["Title"] = "Manage Consumption Data";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <h2 class="text-danger">@TempData["SuccessMessage"]</h2>
+}
+
+<br /><br />
+<a class="btn btn-primary btn-lg" asp-area="Materials" asp-controller="Home" asp-action="AddConsumption">Add New Consumption Data</a>
+<br /><br /><br />
+
+<table style="text-align: center" class="table table-hover table-responsive">
+
+    <colgroup>
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+    </colgroup>
+
+    <thead>
+        <tr style="background: rgb(215, 235, 255)">
+            <th style="text-align: center">Date</th>
+            <th style="text-align: center">Page Width</th>
+            <th style="text-align: center">Page Height</th>
+            <th style="text-align: center">Foil</th>
+            <th style="text-align: center">Tape</th>
+            <th style="text-align: center">Wischwasser</th>
+            <th style="text-align: center">Black Ink</th>
+            <th style="text-align: center">Color Ink</th>
+            <th style="text-align: center">Plate Developer</th>
+        </tr>
+    </thead>
+    <tbody style="text-align: center">
+        @foreach (var consumption in Model)
+        {
+            <tr>
+                <td>@(String.Format("{0:dd MMM yyyy}", consumption.Date))</td>
+                <td>@($"{consumption.PageWidth}") mm </td>
+                <td>@($"{consumption.PageHeight}") mm </td>
+                <td>@($"{consumption.Foil:F4}") kg </td>
+                <td>@($"{consumption.Tape:F4}") m </td>
+                <td>@($"{consumption.Wischwasser:F4}") kg </td>
+                <td>@($"{consumption.InkBlack:F4}") kg </td>
+                <td>@($"{consumption.InkColor:F4}") kg </td>
+                <td>@($"{consumption.PlateDeveloper:F4}") l </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td height="100">
+                    <a asp-action="EditConsumption" asp-route-id="@consumption.Id" style="width: 130px" class="btn btn-default">Edit Record</a>
+                </td>
+                <td>
+                    <a asp-action="DeleteConsumption" asp-route-id="@consumption.Id" style="width: 130px" class="btn btn-danger">Delete Record</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
