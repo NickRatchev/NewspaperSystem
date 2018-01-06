@@ -27,6 +27,6 @@
         public const int ColorPairsMinNumber = 0;
         public const int ColorPairsMaxNumber = 32;
 
-
+        public const double PaperWasteMaxNumber = 100.0;
     }
 }

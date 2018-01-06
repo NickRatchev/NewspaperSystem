@@ -8,6 +8,7 @@
     using Data;
     using Data.Models;
     using Data.Models.Materials;
+    using Microsoft.EntityFrameworkCore;
     using Models;
 
     public class MaterialService : IMaterialService
@@ -22,14 +23,14 @@
 
         #region PaperType
 
-        public IEnumerable<PaperTypeServiceModel> AllPaperTypes()
+        public async Task<IEnumerable<PaperTypeServiceModel>> AllPaperTypesAsync()
         {
-            var result = this.db
+            var result = await this.db
                 .PaperTypes
-                .ProjectTo<PaperTypeServiceModel>()
-                .ToList()
                 .OrderByDescending(pt => pt.IsActive)
-                .ThenBy(pt => pt.Name);
+                .ThenBy(pt => pt.Name)
+                .ProjectTo<PaperTypeServiceModel>()
+                .ToListAsync();
 
             return result;
         }
@@ -39,7 +40,7 @@
             decimal grammage,
             bool isActive)
         {
-            this.db.PaperTypes.Add(new PaperType()
+            await this.db.PaperTypes.AddAsync(new PaperType()
             {
                 Name = name,
                 Grammage = grammage,
@@ -49,11 +50,11 @@
             await this.db.SaveChangesAsync();
         }
 
-        public PaperTypeServiceModel GetPaperTypeById(int id)
+        public async Task<PaperTypeServiceModel> GetPaperTypeByIdAsync(int id)
         {
-            var result = this.db.PaperTypes
+            var result = await this.db.PaperTypes
                 .ProjectTo<PaperTypeServiceModel>()
-                .FirstOrDefault(pt => pt.Id == id);
+                .FirstOrDefaultAsync(pt => pt.Id == id);
 
             return result;
         }
@@ -64,8 +65,8 @@
             decimal grammage,
             bool isActive)
         {
-            var paperType = this.db.PaperTypes
-                .FirstOrDefault(pt => pt.Id == id);
+            var paperType = await this.db.PaperTypes
+                .FirstOrDefaultAsync(pt => pt.Id == id);
 
             paperType.Name = name;
             paperType.Grammage = grammage;
@@ -74,9 +75,9 @@
             await this.db.SaveChangesAsync();
         }
 
-        public bool PaperTypeIsUsed(int id)
+        public async Task<bool> PaperTypeIsUsedAsync(int id)
         {
-            var result = this.db.PaperTypes.Any(pt => pt.Orders.Any());
+            var result = await this.db.PaperTypes.AnyAsync(pt => pt.Orders.Any());
 
             return result;
         }
@@ -90,9 +91,9 @@
         #endregion
 
         #region Paper
-        public IEnumerable<PaperServiceModel> AllPapers()
+        public async Task<IEnumerable<PaperServiceModel>> AllPapersAsync()
         {
-            var result = this.db.Papers
+            var result = await this.db.Papers
                 .Where(p => p.PaperType.IsActive)
                 .Select(p => new PaperServiceModel()
                 {
@@ -103,9 +104,9 @@
                     Price = p.Price,
                     SafetyMargin = p.SafetyMargin
                 })
-                .ToList()
                 .OrderBy(p => p.PaperTypeName)
-                .ThenBy(p => p.Date);
+                .ThenBy(p => p.Date)
+                .ToListAsync();
 
             return result;
         }
@@ -116,7 +117,7 @@
             decimal price,
             decimal safetyMargin)
         {
-            this.db.Papers.Add(new Paper()
+            await this.db.Papers.AddAsync(new Paper()
             {
                 Date = date,
                 PaperTypeId = paperTypeId,
@@ -127,13 +128,13 @@
             await this.db.SaveChangesAsync();
         }
 
-        public PaperServiceModel GetPaperById(int id)
+        public async Task<PaperServiceModel> GetPaperByIdAsync(int id)
         {
-            var resultold = this.db.Papers
+            var resultold = await this.db.Papers
                 .ProjectTo<PaperServiceModel>()
-                .FirstOrDefault(pt => pt.Id == id);
+                .FirstOrDefaultAsync(pt => pt.Id == id);
 
-            var result = this.db.Papers
+            var result = await this.db.Papers
                 .Where(p => p.Id == id)
                 .Select(p => new PaperServiceModel()
                 {
@@ -144,7 +145,7 @@
                     Price = p.Price,
                     SafetyMargin = p.SafetyMargin
                 })
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             return result;
         }
@@ -156,8 +157,8 @@
             decimal price,
             decimal safetyMargin)
         {
-            var material = this.db.Papers
-                .FirstOrDefault(m => m.Id == id);
+            var material = await this.db.Papers
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             material.Date = date;
             material.PaperTypeId = paperTypeId;
@@ -177,13 +178,13 @@
         #endregion
 
         #region ColorInk
-        public IEnumerable<BaseMaterialServiceModel> AllColorInks()
+        public async Task<IEnumerable<BaseMaterialServiceModel>> AllColorInksAsync()
         {
-            var result = this.db
+            var result = await this.db
                 .ColorInks
+                .OrderBy(m => m.Date)
                 .ProjectTo<BaseMaterialServiceModel>()
-                .ToList()
-                .OrderBy(m => m.Date);
+                .ToListAsync();
 
             return result;
         }
@@ -193,7 +194,7 @@
             decimal price,
             decimal safetyMargin)
         {
-            this.db.ColorInks.Add(new ColorInk()
+            await this.db.ColorInks.AddAsync(new ColorInk()
             {
                 Date = date,
                 Price = price,
@@ -203,11 +204,11 @@
             await this.db.SaveChangesAsync();
         }
 
-        public BaseMaterialServiceModel GetColorInkById(int id)
+        public async Task<BaseMaterialServiceModel> GetColorInkByIdAsync(int id)
         {
-            var result = this.db.ColorInks
+            var result = await this.db.ColorInks
                 .ProjectTo<BaseMaterialServiceModel>()
-                .FirstOrDefault(pt => pt.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             return result;
         }
@@ -218,8 +219,8 @@
             decimal price,
             decimal safetyMargin)
         {
-            var material = this.db.ColorInks
-                .FirstOrDefault(m => m.Id == id);
+            var material = await this.db.ColorInks
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             material.Date = date;
             material.Price = price;
@@ -230,7 +231,7 @@
 
         public async Task DeleteColorInkAsync(int id)
         {
-            var material = this.db.ColorInks.FirstOrDefault(m => m.Id == id);
+            var material = await this.db.ColorInks.FirstOrDefaultAsync(m => m.Id == id);
             this.db.ColorInks.Remove(material);
             await this.db.SaveChangesAsync();
         }
@@ -239,13 +240,13 @@
         #endregion
 
         #region BlackInk
-        public IEnumerable<BaseMaterialServiceModel> AllBlackInks()
+        public async Task<IEnumerable<BaseMaterialServiceModel>> AllBlackInksAsync()
         {
-            var result = this.db
+            var result = await this.db
                 .BlackInks
+                .OrderBy(m => m.Date)
                 .ProjectTo<BaseMaterialServiceModel>()
-                .ToList()
-                .OrderBy(m => m.Date);
+                .ToListAsync();
 
             return result;
         }
@@ -255,7 +256,7 @@
             decimal price,
             decimal safetyMargin)
         {
-            this.db.BlackInks.Add(new BlackInk()
+            await this.db.BlackInks.AddAsync(new BlackInk()
             {
                 Date = date,
                 Price = price,
@@ -265,11 +266,11 @@
             await this.db.SaveChangesAsync();
         }
 
-        public BaseMaterialServiceModel GetBlackInkById(int id)
+        public async Task<BaseMaterialServiceModel> GetBlackInkByIdAsync(int id)
         {
-            var result = this.db.BlackInks
+            var result = await this.db.BlackInks
                 .ProjectTo<BaseMaterialServiceModel>()
-                .FirstOrDefault(pt => pt.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             return result;
         }
@@ -280,8 +281,8 @@
             decimal price,
             decimal safetyMargin)
         {
-            var material = this.db.BlackInks
-                .FirstOrDefault(m => m.Id == id);
+            var material = await this.db.BlackInks
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             material.Date = date;
             material.Price = price;
@@ -292,22 +293,21 @@
 
         public async Task DeleteBlackInkAsync(int id)
         {
-            var material = this.db.BlackInks.FirstOrDefault(m => m.Id == id);
+            var material = await this.db.BlackInks.FirstOrDefaultAsync(m => m.Id == id);
             this.db.BlackInks.Remove(material);
             await this.db.SaveChangesAsync();
         }
 
-
         #endregion
 
         #region Plate
-        public IEnumerable<BaseMaterialServiceModel> AllPlates()
+        public async Task<IEnumerable<BaseMaterialServiceModel>> AllPlatesAsync()
         {
-            var result = this.db
+            var result = await this.db
                 .Plates
+                .OrderBy(m => m.Date)
                 .ProjectTo<BaseMaterialServiceModel>()
-                .ToList()
-                .OrderBy(m => m.Date);
+                .ToListAsync();
 
             return result;
         }
@@ -317,7 +317,7 @@
             decimal price,
             decimal safetyMargin)
         {
-            this.db.Plates.Add(new Plate()
+            await this.db.Plates.AddAsync(new Plate()
             {
                 Date = date,
                 Price = price,
@@ -327,11 +327,11 @@
             await this.db.SaveChangesAsync();
         }
 
-        public BaseMaterialServiceModel GetPlateById(int id)
+        public async Task<BaseMaterialServiceModel> GetPlateByIdAsync(int id)
         {
-            var result = this.db.Plates
+            var result = await this.db.Plates
                 .ProjectTo<BaseMaterialServiceModel>()
-                .FirstOrDefault(pt => pt.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             return result;
         }
@@ -342,8 +342,8 @@
             decimal price,
             decimal safetyMargin)
         {
-            var material = this.db.Plates
-                .FirstOrDefault(m => m.Id == id);
+            var material = await this.db.Plates
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             material.Date = date;
             material.Price = price;
@@ -354,22 +354,21 @@
 
         public async Task DeletePlateAsync(int id)
         {
-            var material = this.db.Plates.FirstOrDefault(m => m.Id == id);
+            var material = await this.db.Plates.FirstOrDefaultAsync(m => m.Id == id);
             this.db.Plates.Remove(material);
             await this.db.SaveChangesAsync();
         }
 
-
         #endregion
 
         #region BlindPlate
-        public IEnumerable<BaseMaterialServiceModel> AllBlindPlates()
+        public async Task<IEnumerable<BaseMaterialServiceModel>> AllBlindPlatesAsync()
         {
-            var result = this.db
+            var result = await this.db
                 .BlindPlates
+                .OrderBy(m => m.Date)
                 .ProjectTo<BaseMaterialServiceModel>()
-                .ToList()
-                .OrderBy(m => m.Date);
+                .ToListAsync();
 
             return result;
         }
@@ -379,7 +378,7 @@
             decimal price,
             decimal safetyMargin)
         {
-            this.db.BlindPlates.Add(new BlindPlate()
+            await this.db.BlindPlates.AddAsync(new BlindPlate()
             {
                 Date = date,
                 Price = price,
@@ -389,11 +388,11 @@
             await this.db.SaveChangesAsync();
         }
 
-        public BaseMaterialServiceModel GetBlindPlateById(int id)
+        public async Task<BaseMaterialServiceModel> GetBlindPlateByIdAsync(int id)
         {
-            var result = this.db.BlindPlates
+            var result = await this.db.BlindPlates
                 .ProjectTo<BaseMaterialServiceModel>()
-                .FirstOrDefault(pt => pt.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             return result;
         }
@@ -404,8 +403,8 @@
             decimal price,
             decimal safetyMargin)
         {
-            var material = this.db.BlindPlates
-                .FirstOrDefault(m => m.Id == id);
+            var material = await this.db.BlindPlates
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             material.Date = date;
             material.Price = price;
@@ -416,22 +415,21 @@
 
         public async Task DeleteBlindPlateAsync(int id)
         {
-            var material = this.db.BlindPlates.FirstOrDefault(m => m.Id == id);
+            var material = await this.db.BlindPlates.FirstOrDefaultAsync(m => m.Id == id);
             this.db.BlindPlates.Remove(material);
             await this.db.SaveChangesAsync();
         }
 
-
         #endregion
 
         #region PlateDeveloper
-        public IEnumerable<BaseMaterialServiceModel> AllPlateDevelopers()
+        public async Task<IEnumerable<BaseMaterialServiceModel>> AllPlateDevelopersAsync()
         {
-            var result = this.db
+            var result = await this.db
                 .PlateDevelopers
+                .OrderBy(m => m.Date)
                 .ProjectTo<BaseMaterialServiceModel>()
-                .ToList()
-                .OrderBy(m => m.Date);
+                .ToListAsync();
 
             return result;
         }
@@ -441,7 +439,7 @@
             decimal price,
             decimal safetyMargin)
         {
-            this.db.PlateDevelopers.Add(new PlateDeveloper()
+            await this.db.PlateDevelopers.AddAsync(new PlateDeveloper()
             {
                 Date = date,
                 Price = price,
@@ -451,11 +449,11 @@
             await this.db.SaveChangesAsync();
         }
 
-        public BaseMaterialServiceModel GetPlateDeveloperById(int id)
+        public async Task<BaseMaterialServiceModel> GetPlateDeveloperByIdAsync(int id)
         {
-            var result = this.db.PlateDevelopers
+            var result = await this.db.PlateDevelopers
                 .ProjectTo<BaseMaterialServiceModel>()
-                .FirstOrDefault(pt => pt.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             return result;
         }
@@ -466,8 +464,8 @@
             decimal price,
             decimal safetyMargin)
         {
-            var material = this.db.PlateDevelopers
-                .FirstOrDefault(m => m.Id == id);
+            var material = await this.db.PlateDevelopers
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             material.Date = date;
             material.Price = price;
@@ -478,22 +476,21 @@
 
         public async Task DeletePlateDeveloperAsync(int id)
         {
-            var material = this.db.PlateDevelopers.FirstOrDefault(m => m.Id == id);
+            var material = await this.db.PlateDevelopers.FirstOrDefaultAsync(m => m.Id == id);
             this.db.PlateDevelopers.Remove(material);
             await this.db.SaveChangesAsync();
         }
 
-
         #endregion
 
         #region Wischwasser
-        public IEnumerable<BaseMaterialServiceModel> AllWischwassers()
+        public async Task<IEnumerable<BaseMaterialServiceModel>> AllWischwassersAsync()
         {
-            var result = this.db
+            var result = await this.db
                 .Wischwassers
+                .OrderBy(m => m.Date)
                 .ProjectTo<BaseMaterialServiceModel>()
-                .ToList()
-                .OrderBy(m => m.Date);
+                .ToListAsync();
 
             return result;
         }
@@ -503,7 +500,7 @@
             decimal price,
             decimal safetyMargin)
         {
-            this.db.Wischwassers.Add(new Wischwasser()
+            await this.db.Wischwassers.AddAsync(new Wischwasser()
             {
                 Date = date,
                 Price = price,
@@ -513,11 +510,11 @@
             await this.db.SaveChangesAsync();
         }
 
-        public BaseMaterialServiceModel GetWischwasserById(int id)
+        public async Task<BaseMaterialServiceModel> GetWischwasserByIdAsync(int id)
         {
-            var result = this.db.Wischwassers
+            var result = await this.db.Wischwassers
                 .ProjectTo<BaseMaterialServiceModel>()
-                .FirstOrDefault(pt => pt.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             return result;
         }
@@ -528,8 +525,8 @@
             decimal price,
             decimal safetyMargin)
         {
-            var material = this.db.Wischwassers
-                .FirstOrDefault(m => m.Id == id);
+            var material = await this.db.Wischwassers
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             material.Date = date;
             material.Price = price;
@@ -540,22 +537,21 @@
 
         public async Task DeleteWischwasserAsync(int id)
         {
-            var material = this.db.Wischwassers.FirstOrDefault(m => m.Id == id);
+            var material = await this.db.Wischwassers.FirstOrDefaultAsync(m => m.Id == id);
             this.db.Wischwassers.Remove(material);
             await this.db.SaveChangesAsync();
         }
 
-
         #endregion
 
         #region Foil
-        public IEnumerable<BaseMaterialServiceModel> AllFoils()
+        public async Task<IEnumerable<BaseMaterialServiceModel>> AllFoilsAsync()
         {
-            var result = this.db
+            var result = await this.db
                 .Foils
+                .OrderBy(m => m.Date)
                 .ProjectTo<BaseMaterialServiceModel>()
-                .ToList()
-                .OrderBy(m => m.Date);
+                .ToListAsync();
 
             return result;
         }
@@ -565,7 +561,7 @@
             decimal price,
             decimal safetyMargin)
         {
-            this.db.Foils.Add(new Foil()
+            await this.db.Foils.AddAsync(new Foil()
             {
                 Date = date,
                 Price = price,
@@ -575,11 +571,11 @@
             await this.db.SaveChangesAsync();
         }
 
-        public BaseMaterialServiceModel GetFoilById(int id)
+        public async Task<BaseMaterialServiceModel> GetFoilByIdAsync(int id)
         {
-            var result = this.db.Foils
+            var result = await this.db.Foils
                 .ProjectTo<BaseMaterialServiceModel>()
-                .FirstOrDefault(pt => pt.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             return result;
         }
@@ -590,8 +586,8 @@
             decimal price,
             decimal safetyMargin)
         {
-            var material = this.db.Foils
-                .FirstOrDefault(m => m.Id == id);
+            var material = await this.db.Foils
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             material.Date = date;
             material.Price = price;
@@ -602,22 +598,21 @@
 
         public async Task DeleteFoilAsync(int id)
         {
-            var material = this.db.Foils.FirstOrDefault(m => m.Id == id);
+            var material = await this.db.Foils.FirstOrDefaultAsync(m => m.Id == id);
             this.db.Foils.Remove(material);
             await this.db.SaveChangesAsync();
         }
 
-
         #endregion
 
         #region Tape
-        public IEnumerable<BaseMaterialServiceModel> AllTapes()
+        public async Task<IEnumerable<BaseMaterialServiceModel>> AllTapesAsync()
         {
-            var result = this.db
+            var result = await this.db
                 .Tapes
+                .OrderBy(m => m.Date)
                 .ProjectTo<BaseMaterialServiceModel>()
-                .ToList()
-                .OrderBy(m => m.Date);
+                .ToListAsync();
 
             return result;
         }
@@ -627,7 +622,7 @@
             decimal price,
             decimal safetyMargin)
         {
-            this.db.Tapes.Add(new Tape()
+            await this.db.Tapes.AddAsync(new Tape()
             {
                 Date = date,
                 Price = price,
@@ -637,11 +632,11 @@
             await this.db.SaveChangesAsync();
         }
 
-        public BaseMaterialServiceModel GetTapeById(int id)
+        public async Task<BaseMaterialServiceModel> GetTapeByIdAsync(int id)
         {
-            var result = this.db.Tapes
+            var result = await this.db.Tapes
                 .ProjectTo<BaseMaterialServiceModel>()
-                .FirstOrDefault(pt => pt.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             return result;
         }
@@ -652,8 +647,8 @@
             decimal price,
             decimal safetyMargin)
         {
-            var material = this.db.Tapes
-                .FirstOrDefault(m => m.Id == id);
+            var material = await this.db.Tapes
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             material.Date = date;
             material.Price = price;
@@ -664,22 +659,21 @@
 
         public async Task DeleteTapeAsync(int id)
         {
-            var material = this.db.Tapes.FirstOrDefault(m => m.Id == id);
+            var material = await this.db.Tapes.FirstOrDefaultAsync(m => m.Id == id);
             this.db.Tapes.Remove(material);
             await this.db.SaveChangesAsync();
         }
 
-
         #endregion
 
         #region Service Prices
-        public IEnumerable<ServicePriceServiceModel> AllServices()
+        public async Task<IEnumerable<ServicePriceServiceModel>> AllServicesAsync()
         {
-            var result = this.db
+            var result = await this.db
                 .ServicePrices
                 .ProjectTo<ServicePriceServiceModel>()
-                .ToList()
-                .OrderBy(m => m.Date);
+                .OrderBy(m => m.Date)
+                .ToListAsync();
 
             return result;
         }
@@ -691,7 +685,7 @@
             decimal impression,
             decimal packing)
         {
-            this.db.ServicePrices.Add(new ServicePrice()
+            await this.db.ServicePrices.AddAsync(new ServicePrice()
             {
                 Date = date,
                 PlateExposing = plateExposing,
@@ -703,11 +697,11 @@
             await this.db.SaveChangesAsync();
         }
 
-        public ServicePriceServiceModel GetServiceById(int id)
+        public async Task<ServicePriceServiceModel> GetServiceByIdAsync(int id)
         {
-            var result = this.db.ServicePrices
+            var result = await this.db.ServicePrices
                 .ProjectTo<ServicePriceServiceModel>()
-                .FirstOrDefault(pt => pt.Id == id);
+                .FirstOrDefaultAsync(pt => pt.Id == id);
 
             return result;
         }
@@ -720,8 +714,8 @@
             decimal impression,
             decimal packing)
         {
-            var material = this.db.ServicePrices
-                .FirstOrDefault(m => m.Id == id);
+            var material = await this.db.ServicePrices
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             material.Date = date;
             material.PlateExposing = plateExposing;
@@ -743,13 +737,13 @@
 
         #region Material Consumption
 
-        public IEnumerable<MaterialConsumptionServiceModel> AllConsumptions()
+        public async Task<IEnumerable<MaterialConsumptionServiceModel>> AllConsumptionsAsync()
         {
-            var result = this.db
+            var result = await this.db
                 .MaterialConsumptions
                 .ProjectTo<MaterialConsumptionServiceModel>()
-                .ToList()
-                .OrderBy(m => m.Date);
+                .OrderBy(m => m.Date)
+                .ToListAsync();
 
             return result;
         }
@@ -765,7 +759,7 @@
             decimal inkColor,
             decimal plateDeveloper)
         {
-            this.db.MaterialConsumptions.Add(new MaterialConsumption()
+            await this.db.MaterialConsumptions.AddAsync(new MaterialConsumption()
             {
                 Date = date,
                 PageWidth = pageWidth,
@@ -781,11 +775,11 @@
             await this.db.SaveChangesAsync();
         }
 
-        public MaterialConsumptionServiceModel GetConsumptionById(int id)
+        public async Task<MaterialConsumptionServiceModel> GetConsumptionByIdAsync(int id)
         {
-            var result = this.db.MaterialConsumptions
+            var result = await this.db.MaterialConsumptions
                 .ProjectTo<MaterialConsumptionServiceModel>()
-                .FirstOrDefault(pt => pt.Id == id);
+                .FirstOrDefaultAsync(pt => pt.Id == id);
 
             return result;
         }
@@ -802,8 +796,8 @@
             decimal inkColor,
             decimal plateDeveloper)
         {
-            var material = this.db.MaterialConsumptions
-                .FirstOrDefault(m => m.Id == id);
+            var material = await this.db.MaterialConsumptions
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             material.Date = date;
             material.PageWidth = pageWidth;
@@ -820,8 +814,110 @@
 
         public async Task DeleteConsumptionAsync(int id)
         {
-            var material = this.db.MaterialConsumptions.FirstOrDefault(m => m.Id == id);
+            var material = await this.db.MaterialConsumptions.FirstOrDefaultAsync(m => m.Id == id);
             this.db.MaterialConsumptions.Remove(material);
+            await this.db.SaveChangesAsync();
+        }
+
+        #endregion
+
+        #region Paper Waste
+
+        public async Task<IEnumerable<PaperWasteServiceModel>> AllPaperWastesAsync()
+        {
+            var result = await this.db
+                .PaperWastes
+                .ProjectTo<PaperWasteServiceModel>()
+                .OrderBy(m => m.Date)
+                .ToListAsync();
+
+            return result;
+        }
+
+        public async Task AddPaperWasteAsync(
+            DateTime date,
+            decimal coreWaste,
+            decimal printingWaste,
+            int key1,
+            decimal value1,
+            int key2,
+            decimal value2,
+            int key3,
+            decimal value3,
+            int key4,
+            decimal value4,
+            int key5,
+            decimal value5)
+        {
+            await this.db.PaperWastes.AddAsync(new PaperWaste()
+            {
+                Date = date,
+                CoreWaste = coreWaste,
+                PrintingWaste = printingWaste,
+                Key1 = key1,
+                Value1 = value1,
+                Key2 = key2,
+                Value2 = value2,
+                Key3 = key3,
+                Value3 = value3,
+                Key4 = key4,
+                Value4 = value4,
+                Key5 = key5,
+                Value5 = value5
+            });
+
+            await this.db.SaveChangesAsync();
+        }
+
+        public async Task<PaperWasteServiceModel> GetPaperWasteByIdAsync(int id)
+        {
+            var result = await this.db.PaperWastes
+                .ProjectTo<PaperWasteServiceModel>()
+                .FirstOrDefaultAsync(pt => pt.Id == id);
+
+            return result;
+        }
+
+        public async Task EditPaperWasteAsync(
+            int id,
+            DateTime date,
+            decimal coreWaste,
+            decimal printingWaste,
+            int key1,
+            decimal value1,
+            int key2,
+            decimal value2,
+            int key3,
+            decimal value3,
+            int key4,
+            decimal value4,
+            int key5,
+            decimal value5)
+        {
+            var paperWaste = await this.db.PaperWastes
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            paperWaste.Date = date;
+            paperWaste.CoreWaste = coreWaste;
+            paperWaste.PrintingWaste = printingWaste;
+            paperWaste.Key1 = key1;
+            paperWaste.Value1 = value1;
+            paperWaste.Key2 = key2;
+            paperWaste.Value2 = value2;
+            paperWaste.Key3 = key3;
+            paperWaste.Value3 = value3;
+            paperWaste.Key4 = key4;
+            paperWaste.Value4 = value4;
+            paperWaste.Key5 = key5;
+            paperWaste.Value5 = value5;
+
+            await this.db.SaveChangesAsync();
+        }
+
+        public async Task DeletePaperWasteAsync(int id)
+        {
+            var material = await this.db.PaperWastes.FirstOrDefaultAsync(m => m.Id == id);
+            this.db.PaperWastes.Remove(material);
             await this.db.SaveChangesAsync();
         }
 

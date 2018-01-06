@@ -14,3 +14,17 @@
         <a class="btn btn-primary btn-lg" asp-area="" asp-controller="Account" asp-action="Login">Continue</a>
     </div>
 }
+else
+{
+    if (User.IsInRole(WebConstants.AdministratorRole))
+    {
+        <div>
+            <br />
+            <h1>Newspaper System</h1>
+            <br />
+            <h4>You are at the Administrator Area.</h4>
+        </div>
+    }
+
+}
+

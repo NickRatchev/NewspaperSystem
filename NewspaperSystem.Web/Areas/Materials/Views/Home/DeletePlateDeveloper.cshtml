@@ -1,18 +1,9 @@
 ﻿@model BaseMaterialDeleteViewModel
-
 @{
     ViewData["Title"] = "Delete Plate Developer";
+    ViewData["YesAction"] = "DestroyPlateDeveloper";
+    ViewData["NoAction"] = "AllPlateDeveloper";
+    ViewData["Id"] = Model.Id;
 }
 
-<h2>Are you sure you want to delete selected record?</h2>
-<h2>This operation cannot be undone!!!</h2>
-<br />
-<br />
-
-<a asp-action="DestroyPlateDeveloper" asp-route-id="@Model.Id" style="width: 180px" class="btn btn-danger btn-lg">YES!</a>
-<a>&emsp;&emsp;&emsp;</a>
-<a asp-action="AllPlateDeveloper" style="width: 180px" class="btn btn-default btn-lg">No</a>
-
-@section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
-}
+@Html.Partial("_DeleteForm", Model)

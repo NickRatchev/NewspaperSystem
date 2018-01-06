@@ -1,12 +1,14 @@
-﻿namespace NewspaperSystem.Data.Models
+﻿namespace NewspaperSystem.Web.Areas.Materials.Models
 {
-	using System;
+    using System;
 	using System.ComponentModel.DataAnnotations;
+    using Data;
 
-    public class PaperWaste
+    public class PaperWasteViewModel
     {
         public int Id { get; set; }
 
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
         [Required]

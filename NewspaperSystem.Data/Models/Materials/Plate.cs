@@ -1,6 +1,6 @@
 ﻿namespace NewspaperSystem.Data.Models.Materials
 {
-    public class Plate : Material
+    public class Plate : BaseMaterial
     {
     }
 }

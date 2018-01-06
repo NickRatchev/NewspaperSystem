@@ -10,14 +10,14 @@
     public interface IMaterialService
     {
         // Paper Type
-        IEnumerable<PaperTypeServiceModel> AllPaperTypes();
+        Task<IEnumerable<PaperTypeServiceModel>> AllPaperTypesAsync();
 
         Task AddPaperTypeAsync(
             string name,
             decimal grammage,
             bool isActive);
 
-        PaperTypeServiceModel GetPaperTypeById(int id);
+        Task<PaperTypeServiceModel> GetPaperTypeByIdAsync(int id);
 
         Task EditPaperTypeAsync(
             int id,
@@ -25,12 +25,12 @@
             decimal grammage,
             bool isActive);
 
-        bool PaperTypeIsUsed(int id);
+        Task<bool> PaperTypeIsUsedAsync(int id);
 
         Task DeletePaperTypeAsync(int id);
 
         // Paper
-        IEnumerable<PaperServiceModel> AllPapers();
+        Task<IEnumerable<PaperServiceModel>> AllPapersAsync();
 
         Task AddPaperAsync(
             DateTime date,
@@ -38,7 +38,7 @@
             decimal price,
             decimal safetyMargin);
 
-        PaperServiceModel GetPaperById(int id);
+        Task<PaperServiceModel> GetPaperByIdAsync(int id);
 
         Task EditPaperAsync(
             int id,
@@ -51,14 +51,14 @@
 
 
         // Color Ink
-        IEnumerable<BaseMaterialServiceModel> AllColorInks();
+        Task<IEnumerable<BaseMaterialServiceModel>> AllColorInksAsync();
 
         Task AddColorInkAsync(
             DateTime date,
             decimal price,
             decimal safetyMargin);
 
-        BaseMaterialServiceModel GetColorInkById(int id);
+        Task<BaseMaterialServiceModel> GetColorInkByIdAsync(int id);
 
         Task EditColorInkAsync(
             int id,
@@ -69,14 +69,14 @@
         Task DeleteColorInkAsync(int id);
 
         // Black Ink
-        IEnumerable<BaseMaterialServiceModel> AllBlackInks();
+        Task<IEnumerable<BaseMaterialServiceModel>> AllBlackInksAsync();
 
         Task AddBlackInkAsync(
             DateTime date,
             decimal price,
             decimal safetyMargin);
 
-        BaseMaterialServiceModel GetBlackInkById(int id);
+        Task<BaseMaterialServiceModel> GetBlackInkByIdAsync(int id);
 
         Task EditBlackInkAsync(
             int id,
@@ -87,14 +87,14 @@
         Task DeleteBlackInkAsync(int id);
 
         // Plate
-        IEnumerable<BaseMaterialServiceModel> AllPlates();
+        Task<IEnumerable<BaseMaterialServiceModel>> AllPlatesAsync();
 
         Task AddPlateAsync(
             DateTime date,
             decimal price,
             decimal safetyMargin);
 
-        BaseMaterialServiceModel GetPlateById(int id);
+        Task<BaseMaterialServiceModel> GetPlateByIdAsync(int id);
 
         Task EditPlateAsync(
             int id,
@@ -105,14 +105,14 @@
         Task DeletePlateAsync(int id);
 
         // BlindPlate
-        IEnumerable<BaseMaterialServiceModel> AllBlindPlates();
+        Task<IEnumerable<BaseMaterialServiceModel>> AllBlindPlatesAsync();
 
         Task AddBlindPlateAsync(
             DateTime date,
             decimal price,
             decimal safetyMargin);
 
-        BaseMaterialServiceModel GetBlindPlateById(int id);
+        Task<BaseMaterialServiceModel> GetBlindPlateByIdAsync(int id);
 
         Task EditBlindPlateAsync(
             int id,
@@ -123,14 +123,14 @@
         Task DeleteBlindPlateAsync(int id);
 
         // PlateDeveloper
-        IEnumerable<BaseMaterialServiceModel> AllPlateDevelopers();
+        Task<IEnumerable<BaseMaterialServiceModel>> AllPlateDevelopersAsync();
 
         Task AddPlateDeveloperAsync(
             DateTime date,
             decimal price,
             decimal safetyMargin);
 
-        BaseMaterialServiceModel GetPlateDeveloperById(int id);
+        Task<BaseMaterialServiceModel> GetPlateDeveloperByIdAsync(int id);
 
         Task EditPlateDeveloperAsync(
             int id,
@@ -141,14 +141,14 @@
         Task DeletePlateDeveloperAsync(int id);
 
         // Wischwasser
-        IEnumerable<BaseMaterialServiceModel> AllWischwassers();
+        Task<IEnumerable<BaseMaterialServiceModel>> AllWischwassersAsync();
 
         Task AddWischwasserAsync(
             DateTime date,
             decimal price,
             decimal safetyMargin);
 
-        BaseMaterialServiceModel GetWischwasserById(int id);
+        Task<BaseMaterialServiceModel> GetWischwasserByIdAsync(int id);
 
         Task EditWischwasserAsync(
             int id,
@@ -159,14 +159,14 @@
         Task DeleteWischwasserAsync(int id);
 
         // Foil
-        IEnumerable<BaseMaterialServiceModel> AllFoils();
+        Task<IEnumerable<BaseMaterialServiceModel>> AllFoilsAsync();
 
         Task AddFoilAsync(
             DateTime date,
             decimal price,
             decimal safetyMargin);
 
-        BaseMaterialServiceModel GetFoilById(int id);
+        Task<BaseMaterialServiceModel> GetFoilByIdAsync(int id);
 
         Task EditFoilAsync(
             int id,
@@ -177,14 +177,14 @@
         Task DeleteFoilAsync(int id);
 
         // Tape
-        IEnumerable<BaseMaterialServiceModel> AllTapes();
+        Task<IEnumerable<BaseMaterialServiceModel>> AllTapesAsync();
 
         Task AddTapeAsync(
             DateTime date,
             decimal price,
             decimal safetyMargin);
 
-        BaseMaterialServiceModel GetTapeById(int id);
+        Task<BaseMaterialServiceModel> GetTapeByIdAsync(int id);
 
         Task EditTapeAsync(
             int id,
@@ -195,7 +195,7 @@
         Task DeleteTapeAsync(int id);
 
         // Service Prices
-        IEnumerable<ServicePriceServiceModel> AllServices();
+        Task<IEnumerable<ServicePriceServiceModel>> AllServicesAsync();
 
         Task AddServiceAsync(
             DateTime date,
@@ -204,7 +204,7 @@
             decimal impression,
             decimal packing);
 
-        ServicePriceServiceModel GetServiceById(int id);
+        Task<ServicePriceServiceModel> GetServiceByIdAsync(int id);
 
         Task EditServiceAsync(
             int id,
@@ -217,7 +217,7 @@
         Task DeleteServiceAsync(int id);
 
         // Material Consumptions
-        IEnumerable<MaterialConsumptionServiceModel> AllConsumptions();
+        Task<IEnumerable<MaterialConsumptionServiceModel>> AllConsumptionsAsync();
 
         Task AddConsumptionAsync(
             DateTime date,
@@ -230,7 +230,7 @@
             decimal inkColor,
             decimal plateDeveloper);
 
-        MaterialConsumptionServiceModel GetConsumptionById(int id);
+        Task<MaterialConsumptionServiceModel> GetConsumptionByIdAsync(int id);
 
         Task EditConsumptionAsync(
             int id,
@@ -245,5 +245,43 @@
             decimal plateDeveloper);
 
         Task DeleteConsumptionAsync(int id);
+
+        // Paper Waste
+        Task<IEnumerable<PaperWasteServiceModel>> AllPaperWastesAsync();
+
+        Task AddPaperWasteAsync(
+            DateTime date,
+            decimal coreWaste,
+            decimal printingWaste,
+            int key1,
+            decimal value1,
+            int key2,
+            decimal value2,
+            int key3,
+            decimal value3,
+            int key4,
+            decimal value4,
+            int key5,
+            decimal value5);
+
+        Task<PaperWasteServiceModel> GetPaperWasteByIdAsync(int id);
+
+        Task EditPaperWasteAsync(
+            int id,
+            DateTime date,
+            decimal coreWaste,
+            decimal printingWaste,
+            int key1,
+            decimal value1,
+            int key2,
+            decimal value2,
+            int key3,
+            decimal value3,
+            int key4,
+            decimal value4,
+            int key5,
+            decimal value5);
+
+        Task DeletePaperWasteAsync(int id);
     }
 }

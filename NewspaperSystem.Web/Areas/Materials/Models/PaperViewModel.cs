@@ -1,10 +1,11 @@
-﻿namespace NewspaperSystem.Services.Materials.Models
+﻿namespace NewspaperSystem.Web.Areas.Materials.Models
 {
-	using System;
+    using System;
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
 	using Common.Mapping;
 	using Microsoft.AspNetCore.Mvc.Rendering;
+    using NewspaperSystem.Services.Materials.Models;
 
     public class PaperViewModel : IMapFrom<PaperServiceModel>
     {

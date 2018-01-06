@@ -1,8 +1,9 @@
-﻿namespace NewspaperSystem.Data.Models
+﻿namespace NewspaperSystem.Web.Areas.Materials.Models
 {
-	using System;
+    using System;
 	using System.ComponentModel.DataAnnotations;
 	using Common.Mapping;
+    using Data.Models;
 
     public class MaterialConsumptionViewModel : IMapFrom<MaterialConsumptionServiceModel>
     {

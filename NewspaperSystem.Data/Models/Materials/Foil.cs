@@ -1,6 +1,6 @@
 ﻿namespace NewspaperSystem.Data.Models.Materials
 {
-    public class Foil : Material
+    public class Foil : BaseMaterial
     {
     }
 }

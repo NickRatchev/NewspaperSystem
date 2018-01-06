@@ -5,7 +5,6 @@
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
-    using Data.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -26,9 +25,9 @@
 
         #region PaperType
 
-        public IActionResult AllPaperTypes()
+        public async Task<IActionResult> AllPaperTypes()
         {
-            return View(this.materials.AllPaperTypes());
+            return View(await this.materials.AllPaperTypesAsync());
         }
 
         public IActionResult AddPaperType() => View(new PaperTypeViewModel());
@@ -49,9 +48,9 @@
             return RedirectToAction(nameof(AllPaperTypes));
         }
 
-        public IActionResult EditPaperType(int id)
+        public async Task<IActionResult> EditPaperType(int id)
         {
-            var paperType = this.materials.GetPaperTypeById(id);
+            var paperType = await this.materials.GetPaperTypeByIdAsync(id);
 
             if (paperType == null)
             {
@@ -64,7 +63,7 @@
         }
 
         [HttpPost]
-        public IActionResult EditPaperType(int id, PaperTypeViewModel model)
+        public async Task<IActionResult> EditPaperType(int id, PaperTypeViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -78,7 +77,7 @@
                 IsActive = model.IsActive
             };
 
-            this.materials.EditPaperTypeAsync(
+            await this.materials.EditPaperTypeAsync(
                 id,
                 model.Name,
                 model.Grammage,
@@ -89,12 +88,11 @@
 
         public async Task<IActionResult> DeletePaperType(int id)
         {
-            var paperType = this.materials.GetPaperTypeById(id);
+            var paperType = await this.materials.GetPaperTypeByIdAsync(id);
 
             if (paperType == null)
             {
                 return NotFound();
-                return View(AllColorInk());
             }
 
             return View(new PaperTypeDeleteViewModel()
@@ -105,14 +103,14 @@
 
         public async Task<IActionResult> DestroyPaperType(int id)
         {
-            var paperType = this.materials.GetPaperTypeById(id);
+            var paperType = await this.materials.GetPaperTypeByIdAsync(id);
 
             if (paperType == null)
             {
                 return NotFound();
             }
 
-            var paperIsUsed = this.materials.PaperTypeIsUsed(id);
+            var paperIsUsed = await this.materials.PaperTypeIsUsedAsync(id);
 
             if (paperIsUsed)
             {
@@ -136,15 +134,14 @@
 
         #region Paper
 
-        public IActionResult AllPaper()
+        public async Task<IActionResult> AllPaper()
         {
-            var debug = this.materials.AllPapers();
-            return View(this.materials.AllPapers());
+            return View(await this.materials.AllPapersAsync());
         }
 
-        public IActionResult AddPaper()
+        public async Task<IActionResult> AddPaper()
         {
-            var paperTypes = GetAllPaperTypes();
+            var paperTypes = await GetAllPaperTypesAsync();
 
             return View(new PaperViewModel()
             {
@@ -159,7 +156,7 @@
         {
             if (!ModelState.IsValid)
             {
-                var paperTypes = GetAllPaperTypes();
+                var paperTypes = await GetAllPaperTypesAsync();
 
                 model.PaperTypes = paperTypes;
 
@@ -175,16 +172,16 @@
             return RedirectToAction(nameof(AllPaper));
         }
 
-        public IActionResult EditPaper(int id)
+        public async Task<IActionResult> EditPaper(int id)
         {
-            var material = this.materials.GetPaperById(id);
+            var material = await this.materials.GetPaperByIdAsync(id);
 
             if (material == null)
             {
                 return NotFound();
             }
 
-            var paperTypes = GetAllPaperTypes();
+            var paperTypes = await GetAllPaperTypesAsync();
             var model = Mapper.Map<PaperViewModel>(material);
 
             model.PaperTypes = paperTypes;
@@ -193,18 +190,18 @@
         }
 
         [HttpPost]
-        public IActionResult EditPaper(int id, PaperViewModel model)
+        public async Task<IActionResult> EditPaper(int id, PaperViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                var paperTypes = GetAllPaperTypes();
+                var paperTypes = await GetAllPaperTypesAsync();
 
                 model.PaperTypes = paperTypes;
 
                 return View(model);
             }
+            await this.materials.EditPaperAsync(
 
-            this.materials.EditPaperAsync(
                 id,
                 model.Date,
                 model.PaperTypeId,
@@ -216,7 +213,7 @@
 
         public async Task<IActionResult> DeletePaper(int id)
         {
-            var material = this.materials.GetPaperById(id);
+            var material = await this.materials.GetPaperByIdAsync(id);
 
             if (material == null)
             {
@@ -231,7 +228,7 @@
 
         public async Task<IActionResult> DestroyPaper(int id)
         {
-            var material = this.materials.GetPaperById(id);
+            var material = await this.materials.GetPaperByIdAsync(id);
 
             if (material == null)
             {
@@ -251,9 +248,9 @@
 
         #region ColorInk
 
-        public IActionResult AllColorInk()
+        public async Task<IActionResult> AllColorInk()
         {
-            return View(this.materials.AllColorInks());
+            return View(await this.materials.AllColorInksAsync());
         }
 
         public IActionResult AddColorInk() => View(new BaseMaterialViewModel()
@@ -277,9 +274,9 @@
             return RedirectToAction(nameof(AllColorInk));
         }
 
-        public IActionResult EditColorInk(int id)
+        public async Task<IActionResult> EditColorInk(int id)
         {
-            var material = this.materials.GetColorInkById(id);
+            var material = await this.materials.GetColorInkByIdAsync(id);
 
             if (material == null)
             {
@@ -292,14 +289,14 @@
         }
 
         [HttpPost]
-        public IActionResult EditColorInk(int id, BaseMaterialViewModel model)
+        public async Task<IActionResult> EditColorInk(int id, BaseMaterialViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            this.materials.EditColorInkAsync(
+            await this.materials.EditColorInkAsync(
                 id,
                 model.Date,
                 model.Price,
@@ -310,7 +307,7 @@
 
         public async Task<IActionResult> DeleteColorInk(int id)
         {
-            var material = this.materials.GetColorInkById(id);
+            var material = await this.materials.GetColorInkByIdAsync(id);
 
             if (material == null)
             {
@@ -325,7 +322,7 @@
 
         public async Task<IActionResult> DestroyColorInk(int id)
         {
-            var material = this.materials.GetColorInkById(id);
+            var material = await this.materials.GetColorInkByIdAsync(id);
 
             if (material == null)
             {
@@ -345,9 +342,9 @@
 
         #region BlackInk
 
-        public IActionResult AllBlackInk()
+        public async Task<IActionResult> AllBlackInk()
         {
-            return View(this.materials.AllBlackInks());
+            return View(await this.materials.AllBlackInksAsync());
         }
 
         public IActionResult AddBlackInk() => View(new BaseMaterialViewModel()
@@ -371,9 +368,9 @@
             return RedirectToAction(nameof(AllBlackInk));
         }
 
-        public IActionResult EditBlackInk(int id)
+        public async Task<IActionResult> EditBlackInk(int id)
         {
-            var material = this.materials.GetBlackInkById(id);
+            var material = await this.materials.GetBlackInkByIdAsync(id);
 
             if (material == null)
             {
@@ -386,14 +383,14 @@
         }
 
         [HttpPost]
-        public IActionResult EditBlackInk(int id, BaseMaterialViewModel model)
+        public async Task<IActionResult> EditBlackInk(int id, BaseMaterialViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            this.materials.EditBlackInkAsync(
+            await this.materials.EditBlackInkAsync(
                 id,
                 model.Date,
                 model.Price,
@@ -404,7 +401,7 @@
 
         public async Task<IActionResult> DeleteBlackInk(int id)
         {
-            var material = this.materials.GetBlackInkById(id);
+            var material = await this.materials.GetBlackInkByIdAsync(id);
 
             if (material == null)
             {
@@ -419,7 +416,7 @@
 
         public async Task<IActionResult> DestroyBlackInk(int id)
         {
-            var material = this.materials.GetBlackInkById(id);
+            var material = await this.materials.GetBlackInkByIdAsync(id);
 
             if (material == null)
             {
@@ -439,9 +436,9 @@
 
         #region Plate
 
-        public IActionResult AllPlate()
+        public async Task<IActionResult> AllPlate()
         {
-            return View(this.materials.AllPlates());
+            return View(await this.materials.AllPlatesAsync());
         }
 
         public IActionResult AddPlate() => View(new BaseMaterialViewModel()
@@ -465,9 +462,9 @@
             return RedirectToAction(nameof(AllPlate));
         }
 
-        public IActionResult EditPlate(int id)
+        public async Task<IActionResult> EditPlate(int id)
         {
-            var material = this.materials.GetPlateById(id);
+            var material = await this.materials.GetPlateByIdAsync(id);
 
             if (material == null)
             {
@@ -480,14 +477,14 @@
         }
 
         [HttpPost]
-        public IActionResult EditPlate(int id, BaseMaterialViewModel model)
+        public async Task<IActionResult> EditPlate(int id, BaseMaterialViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            this.materials.EditPlateAsync(
+            await this.materials.EditPlateAsync(
                 id,
                 model.Date,
                 model.Price,
@@ -498,7 +495,7 @@
 
         public async Task<IActionResult> DeletePlate(int id)
         {
-            var material = this.materials.GetPlateById(id);
+            var material = await this.materials.GetPlateByIdAsync(id);
 
             if (material == null)
             {
@@ -513,7 +510,7 @@
 
         public async Task<IActionResult> DestroyPlate(int id)
         {
-            var material = this.materials.GetPlateById(id);
+            var material = await this.materials.GetPlateByIdAsync(id);
 
             if (material == null)
             {
@@ -533,9 +530,9 @@
 
         #region BlindPlate
 
-        public IActionResult AllBlindPlate()
+        public async Task<IActionResult> AllBlindPlate()
         {
-            return View(this.materials.AllBlindPlates());
+            return View(await this.materials.AllBlindPlatesAsync());
         }
 
         public IActionResult AddBlindPlate() => View(new BaseMaterialViewModel()
@@ -559,9 +556,9 @@
             return RedirectToAction(nameof(AllBlindPlate));
         }
 
-        public IActionResult EditBlindPlate(int id)
+        public async Task<IActionResult> EditBlindPlate(int id)
         {
-            var material = this.materials.GetBlindPlateById(id);
+            var material = await this.materials.GetBlindPlateByIdAsync(id);
 
             if (material == null)
             {
@@ -574,14 +571,14 @@
         }
 
         [HttpPost]
-        public IActionResult EditBlindPlate(int id, BaseMaterialViewModel model)
+        public async Task<IActionResult> EditBlindPlate(int id, BaseMaterialViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            this.materials.EditBlindPlateAsync(
+            await this.materials.EditBlindPlateAsync(
                 id,
                 model.Date,
                 model.Price,
@@ -592,7 +589,7 @@
 
         public async Task<IActionResult> DeleteBlindPlate(int id)
         {
-            var material = this.materials.GetBlindPlateById(id);
+            var material = await this.materials.GetBlindPlateByIdAsync(id);
 
             if (material == null)
             {
@@ -607,7 +604,7 @@
 
         public async Task<IActionResult> DestroyBlindPlate(int id)
         {
-            var material = this.materials.GetBlindPlateById(id);
+            var material = await this.materials.GetBlindPlateByIdAsync(id);
 
             if (material == null)
             {
@@ -627,9 +624,9 @@
 
         #region PlateDeveloper
 
-        public IActionResult AllPlateDeveloper()
+        public async Task<IActionResult> AllPlateDeveloper()
         {
-            return View(this.materials.AllPlateDevelopers());
+            return View(await this.materials.AllPlateDevelopersAsync());
         }
 
         public IActionResult AddPlateDeveloper() => View(new BaseMaterialViewModel()
@@ -653,9 +650,9 @@
             return RedirectToAction(nameof(AllPlateDeveloper));
         }
 
-        public IActionResult EditPlateDeveloper(int id)
+        public async Task<IActionResult> EditPlateDeveloper(int id)
         {
-            var material = this.materials.GetPlateDeveloperById(id);
+            var material = await this.materials.GetPlateDeveloperByIdAsync(id);
 
             if (material == null)
             {
@@ -668,14 +665,14 @@
         }
 
         [HttpPost]
-        public IActionResult EditPlateDeveloper(int id, BaseMaterialViewModel model)
+        public async Task<IActionResult> EditPlateDeveloper(int id, BaseMaterialViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            this.materials.EditPlateDeveloperAsync(
+            await this.materials.EditPlateDeveloperAsync(
                 id,
                 model.Date,
                 model.Price,
@@ -686,7 +683,7 @@
 
         public async Task<IActionResult> DeletePlateDeveloper(int id)
         {
-            var material = this.materials.GetPlateDeveloperById(id);
+            var material = await this.materials.GetPlateDeveloperByIdAsync(id);
 
             if (material == null)
             {
@@ -701,7 +698,7 @@
 
         public async Task<IActionResult> DestroyPlateDeveloper(int id)
         {
-            var material = this.materials.GetPlateDeveloperById(id);
+            var material = await this.materials.GetPlateDeveloperByIdAsync(id);
 
             if (material == null)
             {
@@ -721,9 +718,9 @@
 
         #region Wischwasser
 
-        public IActionResult AllWischwasser()
+        public async Task<IActionResult> AllWischwasser()
         {
-            return View(this.materials.AllWischwassers());
+            return View(await this.materials.AllWischwassersAsync());
         }
 
         public IActionResult AddWischwasser() => View(new BaseMaterialViewModel()
@@ -747,9 +744,9 @@
             return RedirectToAction(nameof(AllWischwasser));
         }
 
-        public IActionResult EditWischwasser(int id)
+        public async Task<IActionResult> EditWischwasser(int id)
         {
-            var material = this.materials.GetWischwasserById(id);
+            var material = await this.materials.GetWischwasserByIdAsync(id);
 
             if (material == null)
             {
@@ -762,14 +759,14 @@
         }
 
         [HttpPost]
-        public IActionResult EditWischwasser(int id, BaseMaterialViewModel model)
+        public async Task<IActionResult> EditWischwasser(int id, BaseMaterialViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            this.materials.EditWischwasserAsync(
+            await this.materials.EditWischwasserAsync(
                 id,
                 model.Date,
                 model.Price,
@@ -780,7 +777,7 @@
 
         public async Task<IActionResult> DeleteWischwasser(int id)
         {
-            var material = this.materials.GetWischwasserById(id);
+            var material = await this.materials.GetWischwasserByIdAsync(id);
 
             if (material == null)
             {
@@ -795,7 +792,7 @@
 
         public async Task<IActionResult> DestroyWischwasser(int id)
         {
-            var material = this.materials.GetWischwasserById(id);
+            var material = await this.materials.GetWischwasserByIdAsync(id);
 
             if (material == null)
             {
@@ -815,9 +812,9 @@
 
         #region Foil
 
-        public IActionResult AllFoil()
+        public async Task<IActionResult> AllFoil()
         {
-            return View(this.materials.AllFoils());
+            return View(await this.materials.AllFoilsAsync());
         }
 
         public IActionResult AddFoil() => View(new BaseMaterialViewModel()
@@ -841,9 +838,9 @@
             return RedirectToAction(nameof(AllFoil));
         }
 
-        public IActionResult EditFoil(int id)
+        public async Task<IActionResult> EditFoil(int id)
         {
-            var material = this.materials.GetFoilById(id);
+            var material = await this.materials.GetFoilByIdAsync(id);
 
             if (material == null)
             {
@@ -856,14 +853,14 @@
         }
 
         [HttpPost]
-        public IActionResult EditFoil(int id, BaseMaterialViewModel model)
+        public async Task<IActionResult> EditFoil(int id, BaseMaterialViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            this.materials.EditFoilAsync(
+            await this.materials.EditFoilAsync(
                 id,
                 model.Date,
                 model.Price,
@@ -874,7 +871,7 @@
 
         public async Task<IActionResult> DeleteFoil(int id)
         {
-            var material = this.materials.GetFoilById(id);
+            var material = await this.materials.GetFoilByIdAsync(id);
 
             if (material == null)
             {
@@ -889,7 +886,7 @@
 
         public async Task<IActionResult> DestroyFoil(int id)
         {
-            var material = this.materials.GetFoilById(id);
+            var material = await this.materials.GetFoilByIdAsync(id);
 
             if (material == null)
             {
@@ -909,9 +906,9 @@
 
         #region Tape
 
-        public IActionResult AllTape()
+        public async Task<IActionResult> AllTape()
         {
-            return View(this.materials.AllTapes());
+            return View(await this.materials.AllTapesAsync());
         }
 
         public IActionResult AddTape() => View(new BaseMaterialViewModel()
@@ -935,9 +932,9 @@
             return RedirectToAction(nameof(AllTape));
         }
 
-        public IActionResult EditTape(int id)
+        public async Task<IActionResult> EditTape(int id)
         {
-            var material = this.materials.GetTapeById(id);
+            var material = await this.materials.GetTapeByIdAsync(id);
 
             if (material == null)
             {
@@ -950,14 +947,14 @@
         }
 
         [HttpPost]
-        public IActionResult EditTape(int id, BaseMaterialViewModel model)
+        public async Task<IActionResult> EditTape(int id, BaseMaterialViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            this.materials.EditTapeAsync(
+            await this.materials.EditTapeAsync(
                 id,
                 model.Date,
                 model.Price,
@@ -968,7 +965,7 @@
 
         public async Task<IActionResult> DeleteTape(int id)
         {
-            var material = this.materials.GetTapeById(id);
+            var material = await this.materials.GetTapeByIdAsync(id);
 
             if (material == null)
             {
@@ -983,7 +980,7 @@
 
         public async Task<IActionResult> DestroyTape(int id)
         {
-            var material = this.materials.GetTapeById(id);
+            var material = await this.materials.GetTapeByIdAsync(id);
 
             if (material == null)
             {
@@ -1003,9 +1000,9 @@
 
         #region Service Prices
 
-        public IActionResult AllService()
+        public async Task<IActionResult> AllService()
         {
-            return View(this.materials.AllServices());
+            return View(await this.materials.AllServicesAsync());
         }
 
         public IActionResult AddService() => View(new ServicePriceViewModel()
@@ -1031,9 +1028,9 @@
             return RedirectToAction(nameof(AllService));
         }
 
-        public IActionResult EditService(int id)
+        public async Task<IActionResult> EditService(int id)
         {
-            var servicePrice = this.materials.GetServiceById(id);
+            var servicePrice = await this.materials.GetServiceByIdAsync(id);
 
             if (servicePrice == null)
             {
@@ -1046,14 +1043,14 @@
         }
 
         [HttpPost]
-        public IActionResult EditService(int id, ServicePriceViewModel model)
+        public async Task<IActionResult> EditService(int id, ServicePriceViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            this.materials.EditServiceAsync(
+            await this.materials.EditServiceAsync(
                 id,
                 model.Date,
                 model.PlateExposing,
@@ -1066,7 +1063,7 @@
 
         public async Task<IActionResult> DeleteService(int id)
         {
-            var servicePrice = this.materials.GetServiceById(id);
+            var servicePrice = await this.materials.GetServiceByIdAsync(id);
 
             if (servicePrice == null)
             {
@@ -1081,7 +1078,7 @@
 
         public async Task<IActionResult> DestroyService(int id)
         {
-            var servicePrice = this.materials.GetServiceById(id);
+            var servicePrice = await this.materials.GetServiceByIdAsync(id);
 
             if (servicePrice == null)
             {
@@ -1101,9 +1098,9 @@
 
         #region Material Consumption
 
-        public IActionResult AllConsumption()
+        public async Task<IActionResult> AllConsumption()
         {
-            return View(this.materials.AllConsumptions());
+            return View(await this.materials.AllConsumptionsAsync());
         }
 
         public IActionResult AddConsumption() => View(new MaterialConsumptionViewModel()
@@ -1133,9 +1130,9 @@
             return RedirectToAction(nameof(AllConsumption));
         }
 
-        public IActionResult EditConsumption(int id)
+        public async Task<IActionResult> EditConsumption(int id)
         {
-            var consumptionPrice = this.materials.GetConsumptionById(id);
+            var consumptionPrice = await this.materials.GetConsumptionByIdAsync(id);
 
             if (consumptionPrice == null)
             {
@@ -1148,14 +1145,14 @@
         }
 
         [HttpPost]
-        public IActionResult EditConsumption(int id, MaterialConsumptionViewModel model)
+        public async Task<IActionResult> EditConsumption(int id, MaterialConsumptionViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            this.materials.EditConsumptionAsync(
+            await this.materials.EditConsumptionAsync(
                 id,
                 model.Date,
                 model.PageWidth,
@@ -1172,14 +1169,14 @@
 
         public async Task<IActionResult> DeleteConsumption(int id)
         {
-            var consumptionPrice = this.materials.GetConsumptionById(id);
+            var consumptionPrice = await this.materials.GetConsumptionByIdAsync(id);
 
             if (consumptionPrice == null)
             {
                 return NotFound();
             }
 
-            return View(new MaterialConsumptionDeleteModel()
+            return View(new MaterialConsumptionDeleteViewModel()
             {
                 Id = id
             });
@@ -1187,7 +1184,7 @@
 
         public async Task<IActionResult> DestroyConsumption(int id)
         {
-            var consumptionPrice = this.materials.GetConsumptionById(id);
+            var consumptionPrice = await this.materials.GetConsumptionByIdAsync(id);
 
             if (consumptionPrice == null)
             {
@@ -1205,17 +1202,133 @@
 
         #endregion
 
-        private IList<SelectListItem> GetAllPaperTypes()
+        #region Paper Waste
+
+        public async Task<IActionResult> AllPaperWaste()
         {
-            var result = this.materials.AllPaperTypes()
-                .Where(pt => pt.IsActive)
-                .Select(pt => new SelectListItem()
-                {
-                    Text = $"{pt.Name} {pt.Grammage} гр.",
-                    Value = pt.Id.ToString()
-                })
-                .OrderBy(r => r.Text)
-                .ToList();
+            return View(await this.materials.AllPaperWastesAsync());
+        }
+
+        public IActionResult AddPaperWaste() => View(new PaperWasteViewModel()
+        {
+            Date = DateTime.UtcNow
+        });
+
+        [HttpPost]
+        public async Task<IActionResult> AddPaperWaste(PaperWasteViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await this.materials.AddPaperWasteAsync(
+                model.Date,
+                model.CoreWaste,
+                model.PrintingWaste,
+                model.Key1,
+                model.Value1,
+                model.Key2,
+                model.Value2,
+                model.Key3,
+                model.Value3,
+                model.Key4,
+                model.Value4,
+                model.Key5,
+                model.Value5);
+
+            return RedirectToAction(nameof(AllPaperWaste));
+        }
+
+        public async Task<IActionResult> EditPaperWaste(int id)
+        {
+            var paperWaste = await this.materials.GetPaperWasteByIdAsync(id);
+
+            if (paperWaste == null)
+            {
+                return NotFound();
+            }
+
+            var model = Mapper.Map<PaperWasteViewModel>(paperWaste);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditPaperWaste(int id, PaperWasteViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await this.materials.EditPaperWasteAsync(
+                id,
+                model.Date,
+                model.CoreWaste,
+                model.PrintingWaste,
+                model.Key1,
+                model.Value1,
+                model.Key2,
+                model.Value2,
+                model.Key3,
+                model.Value3,
+                model.Key4,
+                model.Value4,
+                model.Key5,
+                model.Value5);
+
+            return RedirectToAction(nameof(AllPaperWaste));
+        }
+
+        public async Task<IActionResult> DeletePaperWaste(int id)
+        {
+            var paperWaste = await this.materials.GetPaperWasteByIdAsync(id);
+
+            if (paperWaste == null)
+            {
+                return NotFound();
+            }
+
+            return View(new PaperWasteDeleteViewModel()
+            {
+                Id = id
+            });
+        }
+
+        public async Task<IActionResult> DestroyPaperWaste(int id)
+        {
+            var paperWaste = await this.materials.GetPaperWasteByIdAsync(id);
+
+            if (paperWaste == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                await this.materials.DeletePaperWasteAsync(id);
+
+                this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
+
+                return RedirectToAction(nameof(AllPaperWaste));
+            }
+        }
+
+        #endregion
+
+        private async Task<IList<SelectListItem>> GetAllPaperTypesAsync()
+        {
+            var allPaperTypes = await this.materials.AllPaperTypesAsync();
+
+            var result = allPaperTypes
+             .Where(pt => pt.IsActive)
+             .Select(pt => new SelectListItem()
+             {
+                 Text = $"{pt.Name} {pt.Grammage} гр.",
+                 Value = pt.Id.ToString()
+             })
+             .OrderBy(r => r.Text)
+             .ToList();
 
             return result;
         }

@@ -1,0 +1,85 @@
+﻿@model IEnumerable<PaperWasteServiceModel>
+@{
+    ViewData["Title"] = "Manage Paper Waste Data";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+<h2 class="text-danger">@TempData["SuccessMessage"]</h2>
+}
+
+<br /><br />
+<a class="btn btn-primary btn-lg" asp-area="Materials" asp-controller="Home" asp-action="AddPaperWaste">Add New Paper Waste Data</a>
+<br /><br /><br />
+
+<table style="text-align: center" class="table table-hover table-responsive">
+
+    <colgroup>
+        <col span="1" style="width: 16%;">
+        <col span="1" style="width: 16%;">
+        <col span="1" style="width: 16%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+    </colgroup>
+
+    <thead>
+        <tr style="background: rgb(215, 235, 255)">
+            <th style="text-align: center">Date</th>
+            <th style="text-align: center">Core Waste</th>
+            <th style="text-align: center">Printing Waste</th>
+            <th style="text-align: center">Pages Key1</th>
+            <th style="text-align: center">Pages Key2</th>
+            <th style="text-align: center">Pages Key3</th>
+            <th style="text-align: center">Pages Key4</th>
+            <th style="text-align: center">Pages Key5</th>
+        </tr>
+    </thead>
+    <tbody style="text-align: center">
+        @foreach (var paperWaste in Model)
+        {
+        <tr>
+            <td>@(String.Format("{0:dd MMM yyyy}", paperWaste.Date))</td>
+            <td></td>
+            <td></td>
+            <td>@($"{paperWaste.Key1:F0}")</td>
+            <td>@($"{paperWaste.Key2:F0}")</td>
+            <td>@($"{paperWaste.Key3:F0}")</td>
+            <td>@($"{paperWaste.Key4:F0}")</td>
+            <td>@($"{paperWaste.Key5:F0}")</td>
+        </tr>
+        <tr>
+            <td>@(String.Format("{0:dd MMM yyyy}", paperWaste.Date))</td>
+            <td>@($"{paperWaste.CoreWaste}")</td>
+            <td>@($"{paperWaste.PrintingWaste}")</td>
+            <td>@($"{paperWaste.Value1:F4}") % </td>
+            <td>@($"{paperWaste.Value2:F4}") % </td>
+            <td>@($"{paperWaste.Value3:F4}") % </td>
+            <td>@($"{paperWaste.Value4:F4}") % </td>
+            <td>@($"{paperWaste.Value5:F4}") % </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td height="100">
+                <a asp-action="EditPaperWaste" asp-route-id="@paperWaste.Id" style="width: 130px" class="btn btn-default">Edit Record</a>
+            </td>
+            <td>
+                <a asp-action="DeletePaperWaste" asp-route-id="@paperWaste.Id" style="width: 130px" class="btn btn-danger">Delete Record</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
