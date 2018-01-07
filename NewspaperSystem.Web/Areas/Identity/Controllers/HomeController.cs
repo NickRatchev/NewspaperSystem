@@ -8,20 +8,31 @@
     using Models;
     using NewspaperSystem.Services.Identity;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Web.Models.AccountViewModels;
 
-    [Area("Identity")]
+    [Area(WebConstants.IdentityArea)]
     [Authorize(Roles = WebConstants.AdministratorRole)]
     public class HomeController : Controller
     {
         private readonly IIdentityService users;
         private readonly UserManager<User> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public HomeController(IIdentityService users, UserManager<User> userManager)
+        public HomeController(
+            IIdentityService users,
+            UserManager<User> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             this.users = users;
             this.userManager = userManager;
+            this.roleManager = roleManager;
+        }
+
+        public async Task<IActionResult> AllUsers()
+        {
+            return View(await this.users.AllUsersAsync());
         }
 
         public async Task<IActionResult> ManageRoles(string id)
@@ -37,7 +48,6 @@
 
             return View(viewModel);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> ManageRoles(string id, IdentityRoleViewModel model)
@@ -56,9 +66,16 @@
 
             var currentRoles = await this.userManager.GetRolesAsync(user);
 
-            await this.userManager.RemoveFromRolesAsync(user, currentRoles);
+            var result = await this.userManager.RemoveFromRolesAsync(user, currentRoles);
 
-            var result = await this.userManager.AddToRolesAsync(user, model.SelectedRoles);
+            if (!result.Succeeded)
+            {
+                AddErrors(result);
+
+                return View(model);
+            }
+
+            result = await this.userManager.AddToRolesAsync(user, model.SelectedRoles);
 
             if (!result.Succeeded)
             {
@@ -69,12 +86,6 @@
 
             this.TempData["SuccessMessage"] = $"Successfuly changed roles for user \"{user.UserName}\"!";
             return RedirectToAction(nameof(AllUsers));
-        }
-
-
-        public IActionResult AllUsers()
-        {
-            return View(this.users.AllUsers());
         }
 
         public IActionResult AddUser() => View();
@@ -260,14 +271,16 @@
             {
                 Username = user.UserName,
                 SelectedRoles = currentRoles,
-                AvailableRoles = new List<SelectListItem>()
-                {
-                    new SelectListItem {Text = "Administrator", Value = WebConstants.AdministratorRole},
-                    new SelectListItem {Text = "Regular User", Value = WebConstants.RegularUserRole},
-                    new SelectListItem {Text = "Accountant", Value = WebConstants.AccountantRole},
-                    new SelectListItem {Text = "Management", Value = WebConstants.ManagementRole}
-                }
+                AvailableRoles = this.roleManager
+                    .Roles
+                    .ToList()
+                    .Select(r => new SelectListItem()
+                    {
+                        Text = r.Name.Replace("User", " User"),
+                        Value = r.Name
+                    }).ToList()
             };
+
             return viewModel;
         }
     }

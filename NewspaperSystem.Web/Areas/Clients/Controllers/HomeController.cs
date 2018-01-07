@@ -10,7 +10,7 @@
     using Models;
     using NewspaperSystem.Services.Clients;
 
-    [Area("Clients")]
+    [Area(WebConstants.ClientsArea)]
     [Authorize(Roles = 
         WebConstants.AdministratorRole + "," + 
         WebConstants.RegularUserRole)]
