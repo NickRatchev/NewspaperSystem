@@ -17,13 +17,11 @@
     {
         private readonly IIdentityService users;
         private readonly UserManager<User> userManager;
-        private readonly RoleManager<User> roleManager;
 
         public HomeController(IIdentityService users, UserManager<User> userManager)
         {
             this.users = users;
             this.userManager = userManager;
-            this.roleManager = this.roleManager;
         }
 
         public async Task<IActionResult> ManageRoles(string id)
@@ -57,17 +55,20 @@
             }
 
             var currentRoles = await this.userManager.GetRolesAsync(user);
+
             await this.userManager.RemoveFromRolesAsync(user, currentRoles);
 
             var result = await this.userManager.AddToRolesAsync(user, model.SelectedRoles);
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                this.TempData["SuccessMessage"] = $"Successfuly changed roles for user \"{user.UserName}\"!";
-                return RedirectToAction(nameof(AllUsers));
+                AddErrors(result);
+
+                return View(model);
             }
 
-            return View(model);
+            this.TempData["SuccessMessage"] = $"Successfuly changed roles for user \"{user.UserName}\"!";
+            return RedirectToAction(nameof(AllUsers));
         }
 
 
@@ -94,20 +95,16 @@
                 Email = model.Email
             }, model.Password);
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                this.TempData["SuccessMessage"] = $"User \"{model.Username}\" was successfuly created!";
-                return RedirectToAction(nameof(AllUsers));
-            }
-            else
-            {
-                foreach (var error in result.Errors)
-                {
-                    AddErrors(result);
-                }
+                AddErrors(result);
 
                 return View(model);
             }
+
+            this.TempData["SuccessMessage"] = $"User \"{model.Username}\" was successfuly created!";
+
+            return RedirectToAction(nameof(AllUsers));
         }
 
         public async Task<IActionResult> EditUser(string id)
@@ -118,16 +115,14 @@
             {
                 return NotFound();
             }
-            else
+
+            return View(new IdentityRegisterViewModel
             {
-                return View(new IdentityRegisterViewModel
-                {
-                    Username = user.UserName,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email
-                });
-            }
+                Username = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email
+            });
         }
 
         [HttpPost]
@@ -140,7 +135,7 @@
 
             var user = await this.userManager.FindByIdAsync(id);
 
-            if (user==null)
+            if (user == null)
             {
                 return NotFound();
             }
@@ -152,20 +147,16 @@
 
             var result = await this.userManager.UpdateAsync(user);
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                this.TempData["SuccessMessage"] = $"User \"{model.Username}\" was updated successfuly!";
-                return RedirectToAction(nameof(AllUsers));
-            }
-            else
-            {
-                foreach (var error in result.Errors)
-                {
-                    AddErrors(result);
-                }
+                AddErrors(result);
 
                 return View(model);
             }
+
+            this.TempData["SuccessMessage"] = $"User \"{model.Username}\" was updated successfuly!";
+
+            return RedirectToAction(nameof(AllUsers));
         }
 
         public async Task<IActionResult> ResetPassword(string id)
@@ -176,13 +167,11 @@
             {
                 return NotFound();
             }
-            else
+
+            return View(new IdentityResetPasswordVewModel
             {
-                return View(new IdentityResetPasswordVewModel
-                {
-                    Username = user.UserName
-                });
-            }
+                Username = user.UserName
+            });
         }
 
         [HttpPost]
@@ -203,17 +192,16 @@
             var token = await this.userManager.GeneratePasswordResetTokenAsync(user);
             var result = await this.userManager.ResetPasswordAsync(user, token, model.Password);
 
-            if (result.Succeeded)
-            {
-                this.TempData["SuccessMessage"] = $"Password for user \"{user.UserName}\" was successfuly changed!";
-                return RedirectToAction(nameof(AllUsers));
-            }
-            else
+            if (!result.Succeeded)
             {
                 AddErrors(result);
 
                 return View(model);
             }
+
+            this.TempData["SuccessMessage"] = $"Password for user \"{user.UserName}\" was successfuly changed!";
+
+            return RedirectToAction(nameof(AllUsers));
         }
 
         public async Task<IActionResult> DeleteUser(string id)
@@ -240,13 +228,19 @@
             {
                 return NotFound();
             }
-            else
-            {
-                this.TempData["SuccessMessage"] = $"User \"{user.UserName}\" was successfuly deleted!";
-                var result = this.userManager.DeleteAsync(user);
 
-                return RedirectToAction(nameof(AllUsers));
+            this.TempData["SuccessMessage"] = $"User \"{user.UserName}\" was successfuly deleted!";
+
+            var result = await this.userManager.DeleteAsync(user);
+
+            if (!result.Succeeded)
+            {
+                AddErrors(result);
+
+                return View(id);
             }
+
+            return RedirectToAction(nameof(AllUsers));
         }
 
 

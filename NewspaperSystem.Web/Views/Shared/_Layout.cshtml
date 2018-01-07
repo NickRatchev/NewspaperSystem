@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using NewspaperSystem.Data.Models.Materials
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -32,34 +33,49 @@
             {
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        
+
                         @*<li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>*@
+
+                        @if (User.IsInRole(WebConstants.AdministratorRole) ||
+                             User.IsInRole(WebConstants.RegularUserRole))
+                        {
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    CLIENTS
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a asp-area="Clients" asp-controller="Home" asp-action="AllClient"><b>Clients</b></a></li>
+                                    <li><a asp-area="Clients" asp-controller="Home" asp-action="AllTowns"><b>Towns</b></a></li>
+                                </ul>
+                            </li>
+                        }
 
                         @if (User.IsInRole(WebConstants.AdministratorRole))
                         {
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    Materials
+                                    MATERIALS
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllPaperTypes">Paper Types</a></li>
-                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllPaper">Paper</a></li>
-                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllColorInk">Ink Color</a></li>
-                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllBlackInk">Ink Black</a></li>
-                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllPlate">Plates</a></li>
-                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllBlindPlate">Plates Blind</a></li>
-                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllPlateDeveloper">Plate Developer</a></li>
-                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllWischwasser">Wischwasser</a></li>
-                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllFoil">Foil</a></li>
-                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllTape">Tape</a></li>
-                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllConsumption">Material Consumption</a></li>
-                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllService">Service Prices</a></li>
-                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllPaperWaste">Paper Waste</a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllPaperTypes"><b>Paper Types</b></a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllPaper"><b>Paper</b></a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllColorInk"><b>Ink Color</b></a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllBlackInk"><b>Ink Black</b></a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllPlate"><b>Plates</b></a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllBlindPlate"><b>Plates Blind</b></a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllPlateDeveloper"><b>Plate Developer</b></a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllWischwasser"><b>Wischwasser</b></a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllFoil"><b>Foil</b></a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllTape"><b>Tape</b></a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllConsumption"><b>Material Consumption</b></a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllService"><b>Service Prices</b></a></li>
+                                    <li><a asp-area="Materials" asp-controller="Home" asp-action="AllPaperWaste"><b>Paper Waste</b></a></li>
                                 </ul>
                             </li>
 
-                            <li><a asp-area="Identity" asp-controller="Home" asp-action="AllUsers">Users</a></li>
+                            <li><a asp-area="Identity" asp-controller="Home" asp-action="AllUsers">USERS</a></li>
                         }
 
                         @*<li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>*@

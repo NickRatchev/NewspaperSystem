@@ -22,8 +22,20 @@ else
             <br />
             <h1>Newspaper System</h1>
             <br />
-            <h4>You are at the Administrator Area.</h4>
+            <h3 style="color: darkred">Administrator Area</h3>
         </div>
+    }
+    else
+    {
+        if (User.IsInRole(WebConstants.RegularUserRole))
+        {
+            <div>
+                <br />
+                <h1>Newspaper System</h1>
+                <br />
+                <h3 style="color: darkred">Regular User Area</h3>
+            </div>
+        }
     }
 
 }

@@ -1,0 +1,41 @@
+﻿@model IEnumerable<TownServiceModel>
+@{
+    ViewData["Title"] = "Manage Towns";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <h2 class="text-danger">@TempData["SuccessMessage"]</h2>
+}
+
+<br /><br />
+<a class="btn btn-primary btn-lg" asp-area="Clients" asp-controller="Home" asp-action="AddTown">Add New Town</a>
+<br /><br /><br />
+
+<table class="table table-hover table-responsive">
+    <thead>
+    <tr style="background: rgb(215,235,255)">
+        <th>TownName</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var town in Model)
+    {
+        <tr>
+            <th>@($"{town.Name}")</th>
+            <td>
+                <a asp-action="EditTown" asp-route-id="@town.Id" style="width: 130px" class="btn btn-default">Edit Town</a>
+                <a>&emsp;</a>
+                <a asp-action="DeleteTown" asp-route-id="@town.Id" style="width: 130px" class="btn btn-danger">Delete Town</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

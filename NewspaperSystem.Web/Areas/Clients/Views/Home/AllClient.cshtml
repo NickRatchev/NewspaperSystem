@@ -1,0 +1,49 @@
+﻿@model IEnumerable<ClientServiceModel>
+@{
+    ViewData["Title"] = "Manage Clients";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <h2 class="text-danger">@TempData["SuccessMessage"]</h2>
+}
+
+<br /><br />
+<a class="btn btn-primary btn-lg" asp-area="Clients" asp-controller="Home" asp-action="AddClient">Add New Client</a>
+<br /><br /><br />
+
+<table class="table table-hover table-responsive">
+    <thead>
+        <tr style="background: rgb(215,235,255)">
+            <th>Client</th>
+            <th>VAT Number</th>
+            <th>Contact Person</th>
+            <th>Email</th>
+            <th>Is Active</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var client in Model)
+        {
+            <tr>
+                <th>@($"{client.CompanyName}")</th>
+                <th>@($"{client.VatNumber}")</th>
+                <th>@($"{client.ContactPerson}")</th>
+                <th>@($"{client.Email}")</th>
+                <td><input disabled="disabled" type="checkbox" @(client.IsActive ? "checked" : string.Empty)></td>
+                <td>
+                    <a asp-action="EditClient" asp-route-id="@client.Id" style="width: 130px" class="btn btn-default">Edit Record</a>
+                    <a>&emsp;</a>
+                    <a asp-action="DeleteClient" asp-route-id="@client.Id" style="width: 130px" class="btn btn-danger">Delete Record</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
