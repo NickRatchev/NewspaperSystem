@@ -11,9 +11,5 @@
         public const string RegularUserRole = "RegularUser";
         public const string AccountantRole = "Accountant";
         public const string ManagementRole = "Management";
-
-        public const string IdentityArea = "Identity";
-        public const string MaterialsArea = "Materials";
-        public const string ClientsArea = "Clients";
     }
 }

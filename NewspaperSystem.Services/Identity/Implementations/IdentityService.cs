@@ -5,8 +5,6 @@
     using Models;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
-    using Microsoft.EntityFrameworkCore;
 
     public class IdentityService : IIdentityService
     {
@@ -17,13 +15,13 @@
             this.db = db;
         }
 
-        public async Task<IEnumerable<IdentityListUserServiceModel>> AllUsersAsync()
+        public IEnumerable<IdentityListUserServiceModel> AllUsers()
         {
-            var result = await this.db
+            var result = this.db
                 .Users
                 .ProjectTo<IdentityListUserServiceModel>()
-                .OrderBy(u => u.Username)
-                .ToListAsync();
+                .ToList()
+                .OrderBy(u=>u.Username);
 
             return result;
         }

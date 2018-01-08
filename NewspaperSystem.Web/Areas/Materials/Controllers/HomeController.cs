@@ -12,7 +12,7 @@
     using NewspaperSystem.Services.Materials;
     using NewspaperSystem.Services.Materials.Models;
 
-    [Area(WebConstants.MaterialsArea)]
+    [Area("Materials")]
     [Authorize(Roles = WebConstants.AdministratorRole)]
     public class HomeController : Controller
     {
