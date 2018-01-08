@@ -11,7 +11,7 @@
         <h4>You must be logged to use the system.</h4>
         <h4>If you don't have an account, please contact the administrator. </h4>
         <br />
-        <a class="btn btn-primary btn-lg" asp-area="" asp-controller="Account" asp-action="Login">Continue</a>
+        <a class="btn btn-primary btn-lg" asp-area="" asp-controller="Account" asp-action="Login">Continue To Login</a>
     </div>
 }
 else
@@ -22,8 +22,20 @@ else
             <br />
             <h1>Newspaper System</h1>
             <br />
-            <h4>You are at the Administrator Area.</h4>
+            <h3 style="color: darkred">Administrator Area</h3>
         </div>
+    }
+    else
+    {
+        if (User.IsInRole(WebConstants.RegularUserRole))
+        {
+            <div>
+                <br />
+                <h1>Newspaper System</h1>
+                <br />
+                <h3 style="color: darkred">Regular User Area</h3>
+            </div>
+        }
     }
 
 }

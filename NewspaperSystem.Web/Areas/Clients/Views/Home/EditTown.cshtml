@@ -1,0 +1,8 @@
+﻿@model TownViewModel
+@{
+    ViewData["Title"] = "Edit town";
+    ViewData["SubmitButton"] = "Save changes";
+    ViewData["CancelAction"] = "AllTown";
+}
+
+@Html.Partial("_TownForm", Model)

@@ -8,23 +8,38 @@
     using Models;
     using NewspaperSystem.Services.Identity;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Web.Models.AccountViewModels;
 
-    [Area("Identity")]
+    [Area(WebConstants.IdentityArea)]
     [Authorize(Roles = WebConstants.AdministratorRole)]
     public class HomeController : Controller
     {
         private readonly IIdentityService users;
         private readonly UserManager<User> userManager;
-        private readonly RoleManager<User> roleManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public HomeController(IIdentityService users, UserManager<User> userManager)
+        public HomeController(
+            IIdentityService users,
+            UserManager<User> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             this.users = users;
             this.userManager = userManager;
-            this.roleManager = this.roleManager;
+            this.roleManager = roleManager;
         }
+
+        #region All Users
+
+        public async Task<IActionResult> AllUsers()
+        {
+            return View(await this.users.AllUsersAsync());
+        }
+
+        #endregion
+
+        #region Manage Roles
 
         public async Task<IActionResult> ManageRoles(string id)
         {
@@ -39,7 +54,6 @@
 
             return View(viewModel);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> ManageRoles(string id, IdentityRoleViewModel model)
@@ -57,116 +71,32 @@
             }
 
             var currentRoles = await this.userManager.GetRolesAsync(user);
-            await this.userManager.RemoveFromRolesAsync(user, currentRoles);
 
-            var result = await this.userManager.AddToRolesAsync(user, model.SelectedRoles);
+            var result = await this.userManager.RemoveFromRolesAsync(user, currentRoles);
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                this.TempData["SuccessMessage"] = $"Successfuly changed roles for user \"{user.UserName}\"!";
-                return RedirectToAction(nameof(AllUsers));
-            }
+                AddErrors(result);
 
-            return View(model);
-        }
-
-
-        public IActionResult AllUsers()
-        {
-            return View(this.users.AllUsers());
-        }
-
-        public IActionResult AddUser() => View();
-
-        [HttpPost]
-        public async Task<IActionResult> AddUser(RegisterViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
                 return View(model);
             }
 
-            var result = await this.userManager.CreateAsync(new User()
-            {
-                UserName = model.Username,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Email = model.Email
-            }, model.Password);
+            result = await this.userManager.AddToRolesAsync(user, model.SelectedRoles);
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                this.TempData["SuccessMessage"] = $"User \"{model.Username}\" was successfuly created!";
-                return RedirectToAction(nameof(AllUsers));
-            }
-            else
-            {
-                foreach (var error in result.Errors)
-                {
-                    AddErrors(result);
-                }
+                AddErrors(result);
 
                 return View(model);
             }
+
+            this.TempData["SuccessMessage"] = $"Successfuly changed roles for user \"{user.UserName}\"!";
+            return RedirectToAction(nameof(AllUsers));
         }
 
-        public async Task<IActionResult> EditUser(string id)
-        {
-            var user = await this.userManager.FindByIdAsync(id);
+        #endregion
 
-            if (user == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return View(new IdentityRegisterViewModel
-                {
-                    Username = user.UserName,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email
-                });
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> EditUser(string id, IdentityRegisterViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            var user = await this.userManager.FindByIdAsync(id);
-
-            if (user==null)
-            {
-                return NotFound();
-            }
-
-            user.UserName = model.Username;
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
-            user.Email = model.Email;
-
-            var result = await this.userManager.UpdateAsync(user);
-
-            if (result.Succeeded)
-            {
-                this.TempData["SuccessMessage"] = $"User \"{model.Username}\" was updated successfuly!";
-                return RedirectToAction(nameof(AllUsers));
-            }
-            else
-            {
-                foreach (var error in result.Errors)
-                {
-                    AddErrors(result);
-                }
-
-                return View(model);
-            }
-        }
+        #region Reset Password
 
         public async Task<IActionResult> ResetPassword(string id)
         {
@@ -176,13 +106,11 @@
             {
                 return NotFound();
             }
-            else
+
+            return View(new IdentityResetPasswordVewModel
             {
-                return View(new IdentityResetPasswordVewModel
-                {
-                    Username = user.UserName
-                });
-            }
+                Username = user.UserName
+            });
         }
 
         [HttpPost]
@@ -203,18 +131,111 @@
             var token = await this.userManager.GeneratePasswordResetTokenAsync(user);
             var result = await this.userManager.ResetPasswordAsync(user, token, model.Password);
 
-            if (result.Succeeded)
-            {
-                this.TempData["SuccessMessage"] = $"Password for user \"{user.UserName}\" was successfuly changed!";
-                return RedirectToAction(nameof(AllUsers));
-            }
-            else
+            if (!result.Succeeded)
             {
                 AddErrors(result);
 
                 return View(model);
             }
+
+            this.TempData["SuccessMessage"] = $"Password for user \"{user.UserName}\" was successfuly changed!";
+
+            return RedirectToAction(nameof(AllUsers));
         }
+
+        #endregion
+
+        #region Add User
+
+        public IActionResult AddUser() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> AddUser(RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var result = await this.userManager.CreateAsync(new User()
+            {
+                UserName = model.Username,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email
+            }, model.Password);
+
+            if (!result.Succeeded)
+            {
+                AddErrors(result);
+
+                return View(model);
+            }
+
+            this.TempData["SuccessMessage"] = $"User \"{model.Username}\" was successfuly created!";
+
+            return RedirectToAction(nameof(AllUsers));
+        }
+
+        #endregion
+
+        #region Edit User
+
+        public async Task<IActionResult> EditUser(string id)
+        {
+            var user = await this.userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(new IdentityRegisterViewModel
+            {
+                Username = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUser(string id, IdentityRegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await this.userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.UserName = model.Username;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.Email = model.Email;
+
+            var result = await this.userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                AddErrors(result);
+
+                return View(model);
+            }
+
+            this.TempData["SuccessMessage"] = $"User \"{model.Username}\" was updated successfuly!";
+
+            return RedirectToAction(nameof(AllUsers));
+        }
+
+        #endregion
+
+        #region Delete User
 
         public async Task<IActionResult> DeleteUser(string id)
         {
@@ -240,15 +261,24 @@
             {
                 return NotFound();
             }
-            else
-            {
-                this.TempData["SuccessMessage"] = $"User \"{user.UserName}\" was successfuly deleted!";
-                var result = this.userManager.DeleteAsync(user);
 
-                return RedirectToAction(nameof(AllUsers));
+            this.TempData["SuccessMessage"] = $"User \"{user.UserName}\" was successfuly deleted!";
+
+            var result = await this.userManager.DeleteAsync(user);
+
+            if (!result.Succeeded)
+            {
+                AddErrors(result);
+
+                return View(id);
             }
+
+            return RedirectToAction(nameof(AllUsers));
         }
 
+        #endregion
+
+        #region Private Methods
 
         private void AddErrors(IdentityResult result)
         {
@@ -266,15 +296,19 @@
             {
                 Username = user.UserName,
                 SelectedRoles = currentRoles,
-                AvailableRoles = new List<SelectListItem>()
-                {
-                    new SelectListItem {Text = "Administrator", Value = WebConstants.AdministratorRole},
-                    new SelectListItem {Text = "Regular User", Value = WebConstants.RegularUserRole},
-                    new SelectListItem {Text = "Accountant", Value = WebConstants.AccountantRole},
-                    new SelectListItem {Text = "Management", Value = WebConstants.ManagementRole}
-                }
+                AvailableRoles = this.roleManager
+                    .Roles
+                    .ToList()
+                    .Select(r => new SelectListItem()
+                    {
+                        Text = r.Name.Replace("User", " User"),
+                        Value = r.Name
+                    }).ToList()
             };
+
             return viewModel;
         }
+
+        #endregion
     }
 }

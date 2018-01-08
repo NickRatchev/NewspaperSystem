@@ -1,0 +1,8 @@
+﻿@model ClientViewModel
+@{
+    ViewData["Title"] = "Edit Client";
+    ViewData["SubmitButton"] = "Save changes";
+    ViewData["CancelAction"] = "AllClient";
+}
+
+@Html.Partial("_ClientForm", Model)

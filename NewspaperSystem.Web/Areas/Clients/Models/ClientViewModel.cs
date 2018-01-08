@@ -1,20 +1,23 @@
-﻿namespace NewspaperSystem.Data.Models
+﻿namespace NewspaperSystem.Web.Areas.Clients.Models
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Common.Mapping;
+    using Data;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using NewspaperSystem.Services.Clients.Models;
 
-    public class Client
+    public class ClientViewModel : IMapFrom<ClientServiceModel>
     {
         public int Id { get; set; }
 
         [Required]
-        [MinLength(DataConstants.CompanyNameMinLength)]
-        [MaxLength(DataConstants.CompanyNameMaxLength)]
+        [StringLength(DataConstants.CompanyNameMaxLength, MinimumLength = DataConstants.CompanyNameMinLength)]
+
         public string CompanyName { get; set; }
 
         [Required]
-        [MinLength(DataConstants.VatMinLength)]
-        [MaxLength(DataConstants.VatMaxLength)]
+        [StringLength(DataConstants.VatMaxLength, MinimumLength = DataConstants.VatMinLength)]
         public string VatNumber { get; set; }
 
         [Required]
@@ -38,10 +41,7 @@
 
         public int TownId { get; set; }
 
-        public Town Town { get; set; }
+        public IList<SelectListItem> Towns { get; set; } = new List<SelectListItem>();
 
-        public List<Product> Products { get; set; } = new List<Product>();
-
-        public List<Order> Orders { get; set; } = new List<Order>();
     }
 }

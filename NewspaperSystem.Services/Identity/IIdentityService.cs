@@ -3,9 +3,10 @@
     using Services;
     using Models;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     public interface IIdentityService : IService
     {
-        IEnumerable<IdentityListUserServiceModel> AllUsers();
+        Task<IEnumerable<IdentityListUserServiceModel>> AllUsersAsync();
     }
 }
