@@ -13,6 +13,9 @@
         public const int UserNameMinLength = 3;
         public const int UserNameMaxLength = 50;
 
+        public const int CompanyNameMinLength = 3;
+        public const int CompanyNameMaxLength = 50;
+
         public const int ProductTitleMinLength = 2;
         public const int ProductTitleMaxLength = 50;
 
@@ -25,12 +28,5 @@
         public const int ColorPairsMaxNumber = 32;
 
         public const double PaperWasteMaxNumber = 100.0;
-
-        public const int CompanyNameMinLength = 3;
-        public const int CompanyNameMaxLength = 50;
-        public const int VatMinLength = 5;
-        public const int VatMaxLength = 50;
-        public const int AddressMaxLength = 200;
-        public const int ContactPersonMaxLength = 100;
     }
 }

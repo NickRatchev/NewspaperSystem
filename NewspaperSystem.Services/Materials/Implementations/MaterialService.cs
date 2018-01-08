@@ -59,7 +59,7 @@
             return result;
         }
 
-        public async Task<bool> EditPaperTypeAsync(
+        public async Task EditPaperTypeAsync(
             int id,
             string name,
             decimal grammage,
@@ -68,18 +68,11 @@
             var paperType = await this.db.PaperTypes
                 .FirstOrDefaultAsync(pt => pt.Id == id);
 
-            if (paperType==null)
-            {
-                return false;
-            }
-
             paperType.Name = name;
             paperType.Grammage = grammage;
             paperType.IsActive = isActive;
 
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<bool> PaperTypeIsUsedAsync(int id)
@@ -89,21 +82,11 @@
             return result;
         }
 
-        public async Task<bool> DeletePaperTypeAsync(int id)
+        public async Task DeletePaperTypeAsync(int id)
         {
-            var paperType = this.db.PaperTypes
-                .FirstOrDefault(pt => pt.Id == id);
-
-            if (paperType==null)
-            {
-                return false;
-            }
-
+            var paperType = this.db.PaperTypes.FirstOrDefault(pt => pt.Id == id);
             this.db.PaperTypes.Remove(paperType);
-
             await this.db.SaveChangesAsync();
-
-            return true;
         }
         #endregion
 
@@ -167,7 +150,7 @@
             return result;
         }
 
-        public async Task<bool> EditPaperAsync(
+        public async Task EditPaperAsync(
             int id,
             DateTime date,
             int paperTypeId,
@@ -177,35 +160,19 @@
             var material = await this.db.Papers
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (material==null)
-            {
-                return false;
-            }
-
             material.Date = date;
             material.PaperTypeId = paperTypeId;
             material.Price = price;
             material.SafetyMargin = safetyMargin;
 
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
-        public async Task<bool> DeletePaperAsync(int id)
+        public async Task DeletePaperAsync(int id)
         {
-            var material = this.db.Papers
-                .FirstOrDefault(m => m.Id == id);
-
-            if (material == null)
-            {
-                return false;
-            }
+            var material = this.db.Papers.FirstOrDefault(m => m.Id == id);
             this.db.Papers.Remove(material);
-
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
         #endregion
@@ -246,7 +213,7 @@
             return result;
         }
 
-        public async Task<bool> EditColorInkAsync(
+        public async Task EditColorInkAsync(
             int id,
             DateTime date,
             decimal price,
@@ -255,35 +222,18 @@
             var material = await this.db.ColorInks
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (material == null)
-            {
-                return false;
-            }
-
             material.Date = date;
             material.Price = price;
             material.SafetyMargin = safetyMargin;
 
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
-        public async Task<bool> DeleteColorInkAsync(int id)
+        public async Task DeleteColorInkAsync(int id)
         {
-            var material = await this.db.ColorInks
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (material == null)
-            {
-                return false;
-            }
-
+            var material = await this.db.ColorInks.FirstOrDefaultAsync(m => m.Id == id);
             this.db.ColorInks.Remove(material);
-
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
 
@@ -325,7 +275,7 @@
             return result;
         }
 
-        public async Task<bool> EditBlackInkAsync(
+        public async Task EditBlackInkAsync(
             int id,
             DateTime date,
             decimal price,
@@ -334,35 +284,18 @@
             var material = await this.db.BlackInks
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (material == null)
-            {
-                return false;
-            }
-
             material.Date = date;
             material.Price = price;
             material.SafetyMargin = safetyMargin;
 
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
-        public async Task<bool> DeleteBlackInkAsync(int id)
+        public async Task DeleteBlackInkAsync(int id)
         {
-            var material = await this.db.BlackInks
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (material == null)
-            {
-                return false;
-            }
-
+            var material = await this.db.BlackInks.FirstOrDefaultAsync(m => m.Id == id);
             this.db.BlackInks.Remove(material);
-
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
         #endregion
@@ -403,7 +336,7 @@
             return result;
         }
 
-        public async Task<bool> EditPlateAsync(
+        public async Task EditPlateAsync(
             int id,
             DateTime date,
             decimal price,
@@ -412,35 +345,18 @@
             var material = await this.db.Plates
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (material == null)
-            {
-                return false;
-            }
-
             material.Date = date;
             material.Price = price;
             material.SafetyMargin = safetyMargin;
 
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
-        public async Task<bool> DeletePlateAsync(int id)
+        public async Task DeletePlateAsync(int id)
         {
-            var material = await this.db.Plates
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (material == null)
-            {
-                return false;
-            }
-
+            var material = await this.db.Plates.FirstOrDefaultAsync(m => m.Id == id);
             this.db.Plates.Remove(material);
-
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
         #endregion
@@ -481,7 +397,7 @@
             return result;
         }
 
-        public async Task<bool> EditBlindPlateAsync(
+        public async Task EditBlindPlateAsync(
             int id,
             DateTime date,
             decimal price,
@@ -490,35 +406,18 @@
             var material = await this.db.BlindPlates
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (material == null)
-            {
-                return false;
-            }
-
             material.Date = date;
             material.Price = price;
             material.SafetyMargin = safetyMargin;
 
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
-        public async Task<bool> DeleteBlindPlateAsync(int id)
+        public async Task DeleteBlindPlateAsync(int id)
         {
-            var material = await this.db.BlindPlates
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (material == null)
-            {
-                return false;
-            }
-
+            var material = await this.db.BlindPlates.FirstOrDefaultAsync(m => m.Id == id);
             this.db.BlindPlates.Remove(material);
-
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
         #endregion
@@ -559,7 +458,7 @@
             return result;
         }
 
-        public async Task<bool> EditPlateDeveloperAsync(
+        public async Task EditPlateDeveloperAsync(
             int id,
             DateTime date,
             decimal price,
@@ -568,35 +467,18 @@
             var material = await this.db.PlateDevelopers
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (material == null)
-            {
-                return false;
-            }
-
             material.Date = date;
             material.Price = price;
             material.SafetyMargin = safetyMargin;
 
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
-        public async Task<bool> DeletePlateDeveloperAsync(int id)
+        public async Task DeletePlateDeveloperAsync(int id)
         {
-            var material = await this.db.PlateDevelopers
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (material == null)
-            {
-                return false;
-            }
-
+            var material = await this.db.PlateDevelopers.FirstOrDefaultAsync(m => m.Id == id);
             this.db.PlateDevelopers.Remove(material);
-
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
         #endregion
@@ -637,7 +519,7 @@
             return result;
         }
 
-        public async Task<bool> EditWischwasserAsync(
+        public async Task EditWischwasserAsync(
             int id,
             DateTime date,
             decimal price,
@@ -646,35 +528,18 @@
             var material = await this.db.Wischwassers
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (material == null)
-            {
-                return false;
-            }
-
             material.Date = date;
             material.Price = price;
             material.SafetyMargin = safetyMargin;
 
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
-        public async Task<bool> DeleteWischwasserAsync(int id)
+        public async Task DeleteWischwasserAsync(int id)
         {
-            var material = await this.db.Wischwassers
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (material == null)
-            {
-                return false;
-            }
-
+            var material = await this.db.Wischwassers.FirstOrDefaultAsync(m => m.Id == id);
             this.db.Wischwassers.Remove(material);
-
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
         #endregion
@@ -715,7 +580,7 @@
             return result;
         }
 
-        public async Task<bool> EditFoilAsync(
+        public async Task EditFoilAsync(
             int id,
             DateTime date,
             decimal price,
@@ -724,35 +589,18 @@
             var material = await this.db.Foils
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (material == null)
-            {
-                return false;
-            }
-
             material.Date = date;
             material.Price = price;
             material.SafetyMargin = safetyMargin;
 
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
-        public async Task<bool> DeleteFoilAsync(int id)
+        public async Task DeleteFoilAsync(int id)
         {
-            var material = await this.db.Foils
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (material == null)
-            {
-                return false;
-            }
-
+            var material = await this.db.Foils.FirstOrDefaultAsync(m => m.Id == id);
             this.db.Foils.Remove(material);
-
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
         #endregion
@@ -793,7 +641,7 @@
             return result;
         }
 
-        public async Task<bool> EditTapeAsync(
+        public async Task EditTapeAsync(
             int id,
             DateTime date,
             decimal price,
@@ -802,35 +650,18 @@
             var material = await this.db.Tapes
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (material == null)
-            {
-                return false;
-            }
-
             material.Date = date;
             material.Price = price;
             material.SafetyMargin = safetyMargin;
 
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
-        public async Task<bool> DeleteTapeAsync(int id)
+        public async Task DeleteTapeAsync(int id)
         {
-            var material = await this.db.Tapes
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (material == null)
-            {
-                return false;
-            }
-
+            var material = await this.db.Tapes.FirstOrDefaultAsync(m => m.Id == id);
             this.db.Tapes.Remove(material);
-
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
         #endregion
@@ -875,7 +706,7 @@
             return result;
         }
 
-        public async Task<bool> EditServiceAsync(
+        public async Task EditServiceAsync(
             int id,
             DateTime date,
             decimal plateExposing,
@@ -886,11 +717,6 @@
             var material = await this.db.ServicePrices
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (material == null)
-            {
-                return false;
-            }
-
             material.Date = date;
             material.PlateExposing = plateExposing;
             material.MachineSetup = machineSetup;
@@ -898,25 +724,13 @@
             material.Packing = packing;
 
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
-        public async Task<bool> DeleteServiceAsync(int id)
+        public async Task DeleteServiceAsync(int id)
         {
-            var material = this.db.ServicePrices
-                .FirstOrDefault(m => m.Id == id);
-
-            if (material == null)
-            {
-                return false;
-            }
-
+            var material = this.db.ServicePrices.FirstOrDefault(m => m.Id == id);
             this.db.ServicePrices.Remove(material);
-
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
         #endregion
@@ -970,7 +784,7 @@
             return result;
         }
 
-        public async Task<bool> EditConsumptionAsync(
+        public async Task EditConsumptionAsync(
             int id,
             DateTime date,
             decimal pageWidth,
@@ -985,11 +799,6 @@
             var material = await this.db.MaterialConsumptions
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (material == null)
-            {
-                return false;
-            }
-
             material.Date = date;
             material.PageWidth = pageWidth;
             material.PageHeight = pageHeight;
@@ -1001,25 +810,13 @@
             material.PlateDeveloper = plateDeveloper;
 
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
-        public async Task<bool> DeleteConsumptionAsync(int id)
+        public async Task DeleteConsumptionAsync(int id)
         {
-            var material = await this.db.MaterialConsumptions
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (material == null)
-            {
-                return false;
-            }
-
+            var material = await this.db.MaterialConsumptions.FirstOrDefaultAsync(m => m.Id == id);
             this.db.MaterialConsumptions.Remove(material);
-
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
         #endregion
@@ -1081,7 +878,7 @@
             return result;
         }
 
-        public async Task<bool> EditPaperWasteAsync(
+        public async Task EditPaperWasteAsync(
             int id,
             DateTime date,
             decimal coreWaste,
@@ -1100,11 +897,6 @@
             var paperWaste = await this.db.PaperWastes
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (paperWaste == null)
-            {
-                return false;
-            }
-
             paperWaste.Date = date;
             paperWaste.CoreWaste = coreWaste;
             paperWaste.PrintingWaste = printingWaste;
@@ -1120,25 +912,13 @@
             paperWaste.Value5 = value5;
 
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
-        public async Task<bool> DeletePaperWasteAsync(int id)
+        public async Task DeletePaperWasteAsync(int id)
         {
-            var paperWaste = await this.db.PaperWastes
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (paperWaste == null)
-            {
-                return false;
-            }
-
-            this.db.PaperWastes.Remove(paperWaste);
-
+            var material = await this.db.PaperWastes.FirstOrDefaultAsync(m => m.Id == id);
+            this.db.PaperWastes.Remove(material);
             await this.db.SaveChangesAsync();
-
-            return true;
         }
 
         #endregion

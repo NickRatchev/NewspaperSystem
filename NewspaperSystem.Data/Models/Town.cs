@@ -12,6 +12,6 @@
         [MaxLength(DataConstants.TownNameMaxLength)]
         public string Name { get; set; }
 
-        public List<Client> Clients { get; set; } = new List<Client>();
+        public List<Client> Clients { get; set; }
     }
 }

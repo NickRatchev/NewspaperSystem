@@ -12,31 +12,20 @@
         [MaxLength(DataConstants.CompanyNameMaxLength)]
         public string CompanyName { get; set; }
 
-        [Required]
-        [MinLength(DataConstants.VatMinLength)]
-        [MaxLength(DataConstants.VatMaxLength)]
         public string VatNumber { get; set; }
 
-        [Required]
-        [MaxLength(DataConstants.AddressMaxLength)]
+        public int TownId { get; set; }
+
         public string Address { get; set; }
 
-        [Required]
-        [MaxLength(DataConstants.ContactPersonMaxLength)]
         public string ContactPerson { get; set; }
 
-        [Required]
-        [Phone]
         public string Phone { get; set; }
 
-        [Required]
-        [EmailAddress]
         public string Email { get; set; }
 
         [Required]
         public bool IsActive { get; set; }
-
-        public int TownId { get; set; }
 
         public Town Town { get; set; }
 

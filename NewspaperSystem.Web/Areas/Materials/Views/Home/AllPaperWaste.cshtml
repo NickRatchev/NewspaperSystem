@@ -43,7 +43,7 @@
         @foreach (var paperWaste in Model)
         {
         <tr>
-            <td></td>
+            <td>@(String.Format("{0:dd MMM yyyy}", paperWaste.Date))</td>
             <td></td>
             <td></td>
             <td>@($"{paperWaste.Key1:F0}")</td>

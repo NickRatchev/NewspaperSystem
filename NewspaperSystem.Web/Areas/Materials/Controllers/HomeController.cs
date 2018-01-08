@@ -77,16 +77,11 @@
                 IsActive = model.IsActive
             };
 
-            var success = await this.materials.EditPaperTypeAsync(
+            await this.materials.EditPaperTypeAsync(
                 id,
                 model.Name,
                 model.Grammage,
                 model.IsActive);
-
-            if (!success)
-            {
-                return NotFound();
-            }
 
             return RedirectToAction(nameof(AllPaperTypes));
         }
@@ -110,6 +105,11 @@
         {
             var paperType = await this.materials.GetPaperTypeByIdAsync(id);
 
+            if (paperType == null)
+            {
+                return NotFound();
+            }
+
             var paperIsUsed = await this.materials.PaperTypeIsUsedAsync(id);
 
             if (paperIsUsed)
@@ -121,12 +121,7 @@
             }
             else
             {
-                var success = await this.materials.DeletePaperTypeAsync(id);
-
-                if (!success)
-                {
-                    return NotFound();
-                }
+                await this.materials.DeletePaperTypeAsync(id);
 
                 this.TempData["SuccessMessage"] =
                     $"The paper \"{paperType.Name} - {paperType.Grammage} гр.\" was deleted!";
@@ -205,18 +200,13 @@
 
                 return View(model);
             }
+            await this.materials.EditPaperAsync(
 
-            var success = await this.materials.EditPaperAsync(
                 id,
                 model.Date,
                 model.PaperTypeId,
                 model.Price,
                 model.SafetyMargin);
-
-            if (!success)
-            {
-                return NotFound();
-            }
 
             return RedirectToAction(nameof(AllPaper));
         }
@@ -238,16 +228,20 @@
 
         public async Task<IActionResult> DestroyPaper(int id)
         {
-            var success = await this.materials.DeletePaperAsync(id);
+            var material = await this.materials.GetPaperByIdAsync(id);
 
-            if (!success)
+            if (material == null)
             {
                 return NotFound();
             }
+            else
+            {
+                await this.materials.DeletePaperAsync(id);
 
-            this.TempData["SuccessMessage"] = $"Selected paper was successfuly deleted!";
+                this.TempData["SuccessMessage"] = $"Selected paper was successfuly deleted!";
 
-            return RedirectToAction(nameof(AllPaper));
+                return RedirectToAction(nameof(AllPaper));
+            }
         }
 
         #endregion
@@ -302,16 +296,11 @@
                 return View(model);
             }
 
-            var success = await this.materials.EditColorInkAsync(
+            await this.materials.EditColorInkAsync(
                 id,
                 model.Date,
                 model.Price,
                 model.SafetyMargin);
-
-            if (!success)
-            {
-                return NotFound();
-            }
 
             return RedirectToAction(nameof(AllColorInk));
         }
@@ -333,17 +322,20 @@
 
         public async Task<IActionResult> DestroyColorInk(int id)
         {
-            var success = await this.materials.DeleteColorInkAsync(id);
+            var material = await this.materials.GetColorInkByIdAsync(id);
 
-            if (!success)
+            if (material == null)
             {
                 return NotFound();
             }
+            else
+            {
+                await this.materials.DeleteColorInkAsync(id);
 
-            this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
+                this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
 
-            return RedirectToAction(nameof(AllColorInk));
-
+                return RedirectToAction(nameof(AllColorInk));
+            }
         }
 
         #endregion
@@ -398,16 +390,11 @@
                 return View(model);
             }
 
-            var success = await this.materials.EditBlackInkAsync(
+            await this.materials.EditBlackInkAsync(
                 id,
                 model.Date,
                 model.Price,
                 model.SafetyMargin);
-
-            if (!success)
-            {
-                return NotFound();
-            }
 
             return RedirectToAction(nameof(AllBlackInk));
         }
@@ -429,16 +416,20 @@
 
         public async Task<IActionResult> DestroyBlackInk(int id)
         {
-            var success = await this.materials.DeleteBlackInkAsync(id);
+            var material = await this.materials.GetBlackInkByIdAsync(id);
 
-            if (!success)
+            if (material == null)
             {
                 return NotFound();
             }
+            else
+            {
+                await this.materials.DeleteBlackInkAsync(id);
 
-            this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
+                this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
 
-            return RedirectToAction(nameof(AllBlackInk));
+                return RedirectToAction(nameof(AllBlackInk));
+            }
         }
 
         #endregion
@@ -493,16 +484,11 @@
                 return View(model);
             }
 
-            var success = await this.materials.EditPlateAsync(
+            await this.materials.EditPlateAsync(
                 id,
                 model.Date,
                 model.Price,
                 model.SafetyMargin);
-
-            if (!success)
-            {
-                return NotFound();
-            }
 
             return RedirectToAction(nameof(AllPlate));
         }
@@ -524,16 +510,20 @@
 
         public async Task<IActionResult> DestroyPlate(int id)
         {
-            var success = await this.materials.DeletePlateAsync(id);
+            var material = await this.materials.GetPlateByIdAsync(id);
 
-            if (!success)
+            if (material == null)
             {
                 return NotFound();
             }
+            else
+            {
+                await this.materials.DeletePlateAsync(id);
 
-            this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
+                this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
 
-            return RedirectToAction(nameof(AllPlate));
+                return RedirectToAction(nameof(AllPlate));
+            }
         }
 
         #endregion
@@ -588,16 +578,11 @@
                 return View(model);
             }
 
-            var success = await this.materials.EditBlindPlateAsync(
+            await this.materials.EditBlindPlateAsync(
                 id,
                 model.Date,
                 model.Price,
                 model.SafetyMargin);
-
-            if (!success)
-            {
-                return NotFound();
-            }
 
             return RedirectToAction(nameof(AllBlindPlate));
         }
@@ -619,16 +604,20 @@
 
         public async Task<IActionResult> DestroyBlindPlate(int id)
         {
-            var success = await this.materials.DeleteBlindPlateAsync(id);
+            var material = await this.materials.GetBlindPlateByIdAsync(id);
 
-            if (!success)
+            if (material == null)
             {
                 return NotFound();
             }
+            else
+            {
+                await this.materials.DeleteBlindPlateAsync(id);
 
-            this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
+                this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
 
-            return RedirectToAction(nameof(AllBlindPlate));
+                return RedirectToAction(nameof(AllBlindPlate));
+            }
         }
 
         #endregion
@@ -683,16 +672,11 @@
                 return View(model);
             }
 
-            var success = await this.materials.EditPlateDeveloperAsync(
+            await this.materials.EditPlateDeveloperAsync(
                 id,
                 model.Date,
                 model.Price,
                 model.SafetyMargin);
-
-            if (!success)
-            {
-                return NotFound();
-            }
 
             return RedirectToAction(nameof(AllPlateDeveloper));
         }
@@ -714,16 +698,20 @@
 
         public async Task<IActionResult> DestroyPlateDeveloper(int id)
         {
-            var success = await this.materials.DeletePlateDeveloperAsync(id);
+            var material = await this.materials.GetPlateDeveloperByIdAsync(id);
 
-            if (!success)
+            if (material == null)
             {
                 return NotFound();
             }
+            else
+            {
+                await this.materials.DeletePlateDeveloperAsync(id);
 
-            this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
+                this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
 
-            return RedirectToAction(nameof(AllPlateDeveloper));
+                return RedirectToAction(nameof(AllPlateDeveloper));
+            }
         }
 
         #endregion
@@ -778,16 +766,11 @@
                 return View(model);
             }
 
-            var success = await this.materials.EditWischwasserAsync(
+            await this.materials.EditWischwasserAsync(
                 id,
                 model.Date,
                 model.Price,
                 model.SafetyMargin);
-
-            if (!success)
-            {
-                return NotFound();
-            }
 
             return RedirectToAction(nameof(AllWischwasser));
         }
@@ -809,16 +792,20 @@
 
         public async Task<IActionResult> DestroyWischwasser(int id)
         {
-            var success = await this.materials.DeleteWischwasserAsync(id);
+            var material = await this.materials.GetWischwasserByIdAsync(id);
 
-            if (!success)
+            if (material == null)
             {
                 return NotFound();
             }
+            else
+            {
+                await this.materials.DeleteWischwasserAsync(id);
 
-            this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
+                this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
 
-            return RedirectToAction(nameof(AllWischwasser));
+                return RedirectToAction(nameof(AllWischwasser));
+            }
         }
 
         #endregion
@@ -873,16 +860,11 @@
                 return View(model);
             }
 
-            var success = await this.materials.EditFoilAsync(
+            await this.materials.EditFoilAsync(
                 id,
                 model.Date,
                 model.Price,
                 model.SafetyMargin);
-
-            if (!success)
-            {
-                return NotFound();
-            }
 
             return RedirectToAction(nameof(AllFoil));
         }
@@ -904,16 +886,20 @@
 
         public async Task<IActionResult> DestroyFoil(int id)
         {
-            var success = await this.materials.DeleteFoilAsync(id);
+            var material = await this.materials.GetFoilByIdAsync(id);
 
-            if (!success)
+            if (material == null)
             {
                 return NotFound();
             }
+            else
+            {
+                await this.materials.DeleteFoilAsync(id);
 
-            this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
+                this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
 
-            return RedirectToAction(nameof(AllFoil));
+                return RedirectToAction(nameof(AllFoil));
+            }
         }
 
         #endregion
@@ -968,16 +954,11 @@
                 return View(model);
             }
 
-            var success = await this.materials.EditTapeAsync(
+            await this.materials.EditTapeAsync(
                 id,
                 model.Date,
                 model.Price,
                 model.SafetyMargin);
-
-            if (!success)
-            {
-                return NotFound();
-            }
 
             return RedirectToAction(nameof(AllTape));
         }
@@ -999,16 +980,20 @@
 
         public async Task<IActionResult> DestroyTape(int id)
         {
-            var success = await this.materials.DeleteTapeAsync(id);
+            var material = await this.materials.GetTapeByIdAsync(id);
 
-            if (!success)
+            if (material == null)
             {
                 return NotFound();
             }
+            else
+            {
+                await this.materials.DeleteTapeAsync(id);
 
-            this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
+                this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
 
-            return RedirectToAction(nameof(AllTape));
+                return RedirectToAction(nameof(AllTape));
+            }
         }
 
         #endregion
@@ -1065,18 +1050,13 @@
                 return View(model);
             }
 
-            var success = await this.materials.EditServiceAsync(
+            await this.materials.EditServiceAsync(
                 id,
                 model.Date,
                 model.PlateExposing,
                 model.MachineSetup,
                 model.Impression,
                 model.Packing);
-
-            if (!success)
-            {
-                return NotFound();
-            }
 
             return RedirectToAction(nameof(AllService));
         }
@@ -1098,16 +1078,20 @@
 
         public async Task<IActionResult> DestroyService(int id)
         {
-            var success = await this.materials.DeleteServiceAsync(id);
+            var servicePrice = await this.materials.GetServiceByIdAsync(id);
 
-            if (!success)
+            if (servicePrice == null)
             {
                 return NotFound();
             }
+            else
+            {
+                await this.materials.DeleteServiceAsync(id);
 
-            this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
+                this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
 
-            return RedirectToAction(nameof(AllService));
+                return RedirectToAction(nameof(AllService));
+            }
         }
 
         #endregion
@@ -1168,7 +1152,7 @@
                 return View(model);
             }
 
-            var success = await this.materials.EditConsumptionAsync(
+            await this.materials.EditConsumptionAsync(
                 id,
                 model.Date,
                 model.PageWidth,
@@ -1179,11 +1163,6 @@
                 model.InkBlack,
                 model.InkColor,
                 model.PlateDeveloper);
-
-            if (!success)
-            {
-                return NotFound();
-            }
 
             return RedirectToAction(nameof(AllConsumption));
         }
@@ -1205,16 +1184,20 @@
 
         public async Task<IActionResult> DestroyConsumption(int id)
         {
-            var success = await this.materials.DeleteConsumptionAsync(id);
+            var consumptionPrice = await this.materials.GetConsumptionByIdAsync(id);
 
-            if (!success)
+            if (consumptionPrice == null)
             {
                 return NotFound();
             }
+            else
+            {
+                await this.materials.DeleteConsumptionAsync(id);
 
-            this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
+                this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
 
-            return RedirectToAction(nameof(AllConsumption));
+                return RedirectToAction(nameof(AllConsumption));
+            }
         }
 
         #endregion
@@ -1279,7 +1262,7 @@
                 return View(model);
             }
 
-            var success = await this.materials.EditPaperWasteAsync(
+            await this.materials.EditPaperWasteAsync(
                 id,
                 model.Date,
                 model.CoreWaste,
@@ -1294,11 +1277,6 @@
                 model.Value4,
                 model.Key5,
                 model.Value5);
-
-            if (!success)
-            {
-                return NotFound();
-            }
 
             return RedirectToAction(nameof(AllPaperWaste));
         }
@@ -1320,16 +1298,20 @@
 
         public async Task<IActionResult> DestroyPaperWaste(int id)
         {
-            var success = await this.materials.DeletePaperWasteAsync(id);
+            var paperWaste = await this.materials.GetPaperWasteByIdAsync(id);
 
-            if (!success)
+            if (paperWaste == null)
             {
                 return NotFound();
             }
+            else
+            {
+                await this.materials.DeletePaperWasteAsync(id);
 
-            this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
+                this.TempData["SuccessMessage"] = $"Selected record was successfuly deleted!";
 
-            return RedirectToAction(nameof(AllPaperWaste));
+                return RedirectToAction(nameof(AllPaperWaste));
+            }
         }
 
         #endregion

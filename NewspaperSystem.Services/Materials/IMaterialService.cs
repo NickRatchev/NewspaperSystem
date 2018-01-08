@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Data.Models;
+    using Data.Models.Materials;
     using Models;
 
     public interface IMaterialService
@@ -18,7 +19,7 @@
 
         Task<PaperTypeServiceModel> GetPaperTypeByIdAsync(int id);
 
-        Task<bool> EditPaperTypeAsync(
+        Task EditPaperTypeAsync(
             int id,
             string name,
             decimal grammage,
@@ -26,7 +27,7 @@
 
         Task<bool> PaperTypeIsUsedAsync(int id);
 
-        Task<bool> DeletePaperTypeAsync(int id);
+        Task DeletePaperTypeAsync(int id);
 
         // Paper
         Task<IEnumerable<PaperServiceModel>> AllPapersAsync();
@@ -39,14 +40,14 @@
 
         Task<PaperServiceModel> GetPaperByIdAsync(int id);
 
-        Task<bool> EditPaperAsync(
+        Task EditPaperAsync(
             int id,
             DateTime date,
             int paperTypeId,
             decimal price,
             decimal safetyMargin);
 
-        Task<bool> DeletePaperAsync(int id);
+        Task DeletePaperAsync(int id);
 
 
         // Color Ink
@@ -59,13 +60,13 @@
 
         Task<BaseMaterialServiceModel> GetColorInkByIdAsync(int id);
 
-        Task<bool> EditColorInkAsync(
+        Task EditColorInkAsync(
             int id,
             DateTime date,
             decimal price,
             decimal safetyMargin);
 
-        Task<bool> DeleteColorInkAsync(int id);
+        Task DeleteColorInkAsync(int id);
 
         // Black Ink
         Task<IEnumerable<BaseMaterialServiceModel>> AllBlackInksAsync();
@@ -77,13 +78,13 @@
 
         Task<BaseMaterialServiceModel> GetBlackInkByIdAsync(int id);
 
-        Task<bool> EditBlackInkAsync(
+        Task EditBlackInkAsync(
             int id,
             DateTime date,
             decimal price,
             decimal safetyMargin);
 
-        Task<bool> DeleteBlackInkAsync(int id);
+        Task DeleteBlackInkAsync(int id);
 
         // Plate
         Task<IEnumerable<BaseMaterialServiceModel>> AllPlatesAsync();
@@ -95,13 +96,13 @@
 
         Task<BaseMaterialServiceModel> GetPlateByIdAsync(int id);
 
-        Task<bool> EditPlateAsync(
+        Task EditPlateAsync(
             int id,
             DateTime date,
             decimal price,
             decimal safetyMargin);
 
-        Task<bool> DeletePlateAsync(int id);
+        Task DeletePlateAsync(int id);
 
         // BlindPlate
         Task<IEnumerable<BaseMaterialServiceModel>> AllBlindPlatesAsync();
@@ -113,13 +114,13 @@
 
         Task<BaseMaterialServiceModel> GetBlindPlateByIdAsync(int id);
 
-        Task<bool> EditBlindPlateAsync(
+        Task EditBlindPlateAsync(
             int id,
             DateTime date,
             decimal price,
             decimal safetyMargin);
 
-        Task<bool> DeleteBlindPlateAsync(int id);
+        Task DeleteBlindPlateAsync(int id);
 
         // PlateDeveloper
         Task<IEnumerable<BaseMaterialServiceModel>> AllPlateDevelopersAsync();
@@ -131,13 +132,13 @@
 
         Task<BaseMaterialServiceModel> GetPlateDeveloperByIdAsync(int id);
 
-        Task<bool> EditPlateDeveloperAsync(
+        Task EditPlateDeveloperAsync(
             int id,
             DateTime date,
             decimal price,
             decimal safetyMargin);
 
-        Task<bool> DeletePlateDeveloperAsync(int id);
+        Task DeletePlateDeveloperAsync(int id);
 
         // Wischwasser
         Task<IEnumerable<BaseMaterialServiceModel>> AllWischwassersAsync();
@@ -149,13 +150,13 @@
 
         Task<BaseMaterialServiceModel> GetWischwasserByIdAsync(int id);
 
-        Task<bool> EditWischwasserAsync(
+        Task EditWischwasserAsync(
             int id,
             DateTime date,
             decimal price,
             decimal safetyMargin);
 
-        Task<bool> DeleteWischwasserAsync(int id);
+        Task DeleteWischwasserAsync(int id);
 
         // Foil
         Task<IEnumerable<BaseMaterialServiceModel>> AllFoilsAsync();
@@ -167,13 +168,13 @@
 
         Task<BaseMaterialServiceModel> GetFoilByIdAsync(int id);
 
-        Task<bool> EditFoilAsync(
+        Task EditFoilAsync(
             int id,
             DateTime date,
             decimal price,
             decimal safetyMargin);
 
-        Task<bool> DeleteFoilAsync(int id);
+        Task DeleteFoilAsync(int id);
 
         // Tape
         Task<IEnumerable<BaseMaterialServiceModel>> AllTapesAsync();
@@ -185,13 +186,13 @@
 
         Task<BaseMaterialServiceModel> GetTapeByIdAsync(int id);
 
-        Task<bool> EditTapeAsync(
+        Task EditTapeAsync(
             int id,
             DateTime date,
             decimal price,
             decimal safetyMargin);
 
-        Task<bool> DeleteTapeAsync(int id);
+        Task DeleteTapeAsync(int id);
 
         // Service Prices
         Task<IEnumerable<ServicePriceServiceModel>> AllServicesAsync();
@@ -205,7 +206,7 @@
 
         Task<ServicePriceServiceModel> GetServiceByIdAsync(int id);
 
-        Task<bool> EditServiceAsync(
+        Task EditServiceAsync(
             int id,
             DateTime date,
             decimal plateExposing,
@@ -213,7 +214,7 @@
             decimal impression,
             decimal packing);
 
-        Task<bool> DeleteServiceAsync(int id);
+        Task DeleteServiceAsync(int id);
 
         // Material Consumptions
         Task<IEnumerable<MaterialConsumptionServiceModel>> AllConsumptionsAsync();
@@ -231,7 +232,7 @@
 
         Task<MaterialConsumptionServiceModel> GetConsumptionByIdAsync(int id);
 
-        Task<bool> EditConsumptionAsync(
+        Task EditConsumptionAsync(
             int id,
             DateTime date,
             decimal pageWidth,
@@ -243,7 +244,7 @@
             decimal inkColor,
             decimal plateDeveloper);
 
-        Task<bool> DeleteConsumptionAsync(int id);
+        Task DeleteConsumptionAsync(int id);
 
         // Paper Waste
         Task<IEnumerable<PaperWasteServiceModel>> AllPaperWastesAsync();
@@ -265,7 +266,7 @@
 
         Task<PaperWasteServiceModel> GetPaperWasteByIdAsync(int id);
 
-        Task<bool> EditPaperWasteAsync(
+        Task EditPaperWasteAsync(
             int id,
             DateTime date,
             decimal coreWaste,
@@ -281,6 +282,6 @@
             int key5,
             decimal value5);
 
-        Task<bool> DeletePaperWasteAsync(int id);
+        Task DeletePaperWasteAsync(int id);
     }
 }
