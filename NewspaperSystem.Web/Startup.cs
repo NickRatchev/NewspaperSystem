@@ -49,7 +49,7 @@
 
             services.AddMvc(options =>
             {
-                options.Filters.Add<ValidateAntiForgeryTokenAttribute>();
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
             });
         }
 
