@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.ComponentModel.DataAnnotations;
+	using System.ComponentModel.DataAnnotations.Schema;
 
     public abstract class BaseMaterial
     {
@@ -14,6 +15,7 @@
         public decimal Price { get; set; }
 
         [Required]
+        [Column(TypeName = DataConstants.PercentageDecimalPrecisionScale)]
         [Range(0.0, 100.0)]
         public decimal SafetyMargin { get; set; }
     }

@@ -11,9 +11,10 @@ using System;
 namespace NewspaperSystem.Data.Migrations
 {
     [DbContext(typeof(NewspaperSystemDbContext))]
-    partial class NewspaperSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180108163155_SetDEcimalPrecisions")]
+    partial class SetDEcimalPrecisions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

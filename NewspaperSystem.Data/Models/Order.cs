@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
+	using System.ComponentModel.DataAnnotations.Schema;
 	using Materials;
 
     public class Order
@@ -25,6 +26,7 @@
         public int PrintRun { get; set; }
 
         [Required]
+        [Column(TypeName = DataConstants.PercentageDecimalPrecisionScale)]
         public decimal Discount { get; set; }
 
         public int OrderCalcId { get; set; }

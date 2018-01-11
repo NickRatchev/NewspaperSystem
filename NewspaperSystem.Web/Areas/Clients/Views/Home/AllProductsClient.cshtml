@@ -1,0 +1,46 @@
+﻿@model ProductsClientListViewModel
+@{
+    ViewData["Title"] = "Manage Client Products";
+}
+
+<h2>@ViewData["Title"] for <b style="color: darkred">"@Model.ClientName"</b></h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+<h2 class="text-capitalize">@TempData["SuccessMessage"]</h2>
+}
+
+<br /><br />
+<a class="btn btn-primary btn-lg" asp-route-id="@Model.ClientId" asp-area="Clients" asp-controller="Home" asp-action="AddProduct">Add New Product</a>
+<br /><br /><br />
+
+<table class="table table-hover table-responsive">
+    <thead>
+        <tr style="background: rgb(215,235,255)">
+            <th>Title</th>
+            <th>Default Discount</th>
+            <th>Is Active</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model.Products)
+        {
+        <tr>
+            <th>@($"{product.Title}")</th>
+            <td>@($"{product.DefaultDiscount:F4}")</td>
+            <th><input disabled="disabled" type="checkbox" @(product.IsActive ? "checked" : string.Empty)></th>
+            <td>
+                <a asp-action="EditProduct" asp-route-id="@product.Id" style="width: 110px" class="btn btn-default">Edit</a>
+                <a>&emsp;</a>
+                <a asp-action="DeleteProduct" asp-route-id="@product.Id" style="width: 110px" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+

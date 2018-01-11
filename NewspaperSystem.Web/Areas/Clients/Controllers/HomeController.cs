@@ -11,8 +11,8 @@
     using NewspaperSystem.Services.Clients;
 
     [Area(WebConstants.ClientsArea)]
-    [Authorize(Roles = 
-        WebConstants.AdministratorRole + "," + 
+    [Authorize(Roles =
+        WebConstants.AdministratorRole + "," +
         WebConstants.RegularUserRole)]
 
     public class HomeController : Controller
@@ -262,6 +262,94 @@
 
             return RedirectToAction(nameof(AllClient));
         }
+
+        #endregion
+
+        #region Products
+
+        public async Task<IActionResult> AllProductsClient(int id)
+        {
+            var products = await this.clients
+                .AllProductByClientIdAsync(id);
+
+            var client = await this.clients
+                .GetClientByIdAsync(id);
+
+            var model = new ProductsClientListViewModel()
+            {
+                ClientId = id,
+                ClientName = client.CompanyName,
+                Products = products
+            };
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> AddProduct(int id)
+        {
+            var client = await this.clients.GetClientByIdAsync(id);
+
+            return View(new ProductViewModel()
+            {
+                ClientName = client.CompanyName,
+                ClientId = id
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddProduct(ProductViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await this.clients.AddProductAsync(
+                model.Title,
+                model.DefaultDiscount,
+                model.IsActive,
+                model.ClientId);
+
+            return RedirectToAction("AllProductsClient", new { id = model.ClientId });
+        }
+
+        public async Task<IActionResult> EditProduct(int id)
+        {
+            var product = await this.clients.GetProductByIdAsync(id);
+
+            if (product==null)
+            {
+                return NotFound();
+            }
+
+            var model = Mapper.Map<ProductViewModel>(product);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProduct(ProductViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var success = await this.clients.EditProductAsync(
+                model.Id,
+                model.Title,
+                model.DefaultDiscount,
+                model.IsActive,
+                model.ClientId);
+
+            if (!success)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction("AllProductsClient", new { id = model.ClientId });
+        }
+
 
         #endregion
 

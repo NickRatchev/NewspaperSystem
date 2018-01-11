@@ -30,14 +30,16 @@
         {
             <tr>
                 <th>@($"{client.CompanyName}")</th>
-                <th>@($"{client.VatNumber}")</th>
-                <th>@($"{client.ContactPerson}")</th>
-                <th>@($"{client.Email}")</th>
+                <td>@($"{client.VatNumber}")</td>
+                <td>@($"{client.ContactPerson}")</td>
+                <td>@($"{client.Email}")</td>
                 <td><input disabled="disabled" type="checkbox" @(client.IsActive ? "checked" : string.Empty)></td>
                 <td>
-                    <a asp-action="EditClient" asp-route-id="@client.Id" style="width: 130px" class="btn btn-default">Edit Record</a>
+                    <a asp-action="AllProductsClient" asp-route-id="@client.Id" style="width: 110px" class="btn btn-default">Products</a>
                     <a>&emsp;</a>
-                    <a asp-action="DeleteClient" asp-route-id="@client.Id" style="width: 130px" class="btn btn-danger">Delete Record</a>
+                    <a asp-action="EditClient" asp-route-id="@client.Id" style="width: 110px" class="btn btn-default">Edit Client</a>
+                    <a>&emsp;</a>
+                    <a asp-action="DeleteClient" asp-route-id="@client.Id" style="width: 110px" class="btn btn-danger">Delete Client</a>
                 </td>
             </tr>
         }

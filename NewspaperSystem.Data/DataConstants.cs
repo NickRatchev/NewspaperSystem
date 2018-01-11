@@ -32,5 +32,14 @@
         public const int VatMaxLength = 50;
         public const int AddressMaxLength = 200;
         public const int ContactPersonMaxLength = 100;
+
+        public const string PercentageDecimalPrecisionScale = "decimal(8, 4)";
+        public const string QuantityDecimalPrecisionScale = "decimal(16, 4)";
+        public const string PageSizeDecimalPrecisionScale = "decimal(8, 4)";
+
+        public const int MaxNumberOfPages = 128;
+        public const int MaxProductionFactor = 32;
+
+
     }
 }

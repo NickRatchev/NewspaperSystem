@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public class PaperWaste
     {
@@ -11,10 +12,12 @@
 
         [Required]
         [Range(0.0, DataConstants.PaperWasteMaxNumber)]
+        [Column(TypeName = DataConstants.PercentageDecimalPrecisionScale)]
         public decimal CoreWaste { get; set; }       // Percentage
 
         [Required]
         [Range(0.0, DataConstants.PaperWasteMaxNumber)]
+        [Column(TypeName = DataConstants.PercentageDecimalPrecisionScale)]
         public decimal PrintingWaste { get; set; }   // Percentage
 
         [Required]
@@ -23,6 +26,7 @@
 
         [Required]
         [Range(0.0, DataConstants.PaperWasteMaxNumber)]
+        [Column(TypeName = DataConstants.PercentageDecimalPrecisionScale)]
         public decimal Value1 { get; set; }          // Percentage
 
         [Required]
@@ -31,6 +35,7 @@
 
         [Required]
         [Range(0.0, DataConstants.PaperWasteMaxNumber)]
+        [Column(TypeName = DataConstants.PercentageDecimalPrecisionScale)]
         public decimal Value2 { get; set; }
 
         [Required]
@@ -39,6 +44,7 @@
 
         [Required]
         [Range(0.0, DataConstants.PaperWasteMaxNumber)]
+        [Column(TypeName = DataConstants.PercentageDecimalPrecisionScale)]
         public decimal Value3 { get; set; }
 
         [Required]
@@ -47,6 +53,7 @@
 
         [Required]
         [Range(0.0, DataConstants.PaperWasteMaxNumber)]
+        [Column(TypeName = DataConstants.PercentageDecimalPrecisionScale)]
         public decimal Value4 { get; set; }
 
         [Required]
@@ -55,6 +62,7 @@
 
         [Required]
         [Range(0.0, DataConstants.PaperWasteMaxNumber)]
+        [Column(TypeName = DataConstants.PercentageDecimalPrecisionScale)]
         public decimal Value5 { get; set; }
     }
 }

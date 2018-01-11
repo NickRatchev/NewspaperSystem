@@ -1,0 +1,9 @@
+﻿@model ProductViewModel
+@{
+    ViewData["Title"] = "Add New Product";
+    ViewData["SubmitButton"] = "Add Product";
+    ViewData["CancelAction"] = "AllProductsClient";
+}
+
+@Html.Partial("_ProductForm", Model)
+

@@ -25,4 +25,10 @@
     <ProjectReference Include="..\NewspaperSystem.Services\NewspaperSystem.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\MachineData\Controllers\" />
+    <Folder Include="Areas\MachineData\Models\" />
+    <Folder Include="Areas\MachineData\Views\" />
+  </ItemGroup>
+
 </Project>

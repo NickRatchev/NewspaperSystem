@@ -202,5 +202,98 @@
         }
 
         #endregion
+
+        #region Products
+
+        public async Task<IEnumerable<ProductServiceModel>> AllProductByClientIdAsync(int clientId)
+        {
+            var result = await this.db
+                .Products
+                .Where(p => p.ClientId == clientId)
+                .OrderBy(p => p.Title)
+                .ProjectTo<ProductServiceModel>()
+                .ToListAsync();
+
+            return result;
+        }
+
+        public async Task AddProductAsync(
+            string title
+            , decimal defaultDiscount
+            , bool isActive
+            , int clientId)
+        {
+            await this.db.Products.AddAsync(new Product()
+            {
+                Title = title,
+                DefaultDiscount = defaultDiscount,
+                IsActive = isActive,
+                ClientId = clientId
+            });
+
+            await this.db.SaveChangesAsync();
+        }
+
+        public async Task<ProductServiceModel> GetProductByIdAsync(int id)
+        {
+            var result = await this.db.Products
+                .ProjectTo<ProductServiceModel>()
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            return result;
+        }
+
+        public async Task<bool> EditProductAsync(
+            int id,
+            string title,
+            decimal defaultDiscount,
+            bool isActive,
+            int clientId)
+        {
+            var product = await this.db.Products
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (product == null)
+            {
+                return false;
+            }
+
+            product.Title = title;
+            product.DefaultDiscount = defaultDiscount;
+            product.IsActive = isActive;
+            product.ClientId = clientId;
+
+            await this.db.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> DeleteProductAsync(int id)
+        {
+            var product = await this.db.Products
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (product == null)
+            {
+                return false;
+            }
+
+            this.db.Products.Remove(product);
+
+            await this.db.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> ProductIsUsedAsync(int id)
+        {
+            var result = await this.db.Products
+                .AnyAsync(p => p.Id == id && p.Orders.Any());
+
+            return result;
+        }
+
+        #endregion
+
     }
 }

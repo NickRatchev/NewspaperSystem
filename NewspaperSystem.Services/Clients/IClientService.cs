@@ -50,5 +50,27 @@
 
         Task<bool> ClientIsUsedAsync(int id);
 
+        // Product
+
+        Task<IEnumerable<ProductServiceModel>> AllProductByClientIdAsync(int clientId);
+
+        Task AddProductAsync(
+            string title,
+            decimal defaultDiscount,
+            bool isActive,
+            int clientId);
+
+        Task<ProductServiceModel> GetProductByIdAsync(int id);
+
+        Task<bool> EditProductAsync(
+            int id,
+            string title,
+            decimal defaultDiscount,
+            bool isActive,
+            int clientId);
+
+        Task<bool> DeleteProductAsync(int id);
+
+        Task<bool> ProductIsUsedAsync(int id);
     }
 }
