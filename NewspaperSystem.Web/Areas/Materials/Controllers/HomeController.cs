@@ -70,13 +70,6 @@
                 return View(model);
             }
 
-            var paperType = new PaperTypeServiceModel()
-            {
-                Name = model.Name,
-                Grammage = model.Grammage,
-                IsActive = model.IsActive
-            };
-
             var success = await this.materials.EditPaperTypeAsync(
                 id,
                 model.Name,

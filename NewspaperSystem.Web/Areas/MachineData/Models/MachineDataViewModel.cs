@@ -1,9 +1,13 @@
-﻿namespace NewspaperSystem.Data.Models
+﻿namespace NewspaperSystem.Web.Areas.MachineData.Models
 {
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Data;
+    using System.Collections.Generic;
+    using Common.Mapping;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using NewspaperSystem.Services.MachineData.Models;
 
-    public class MachineData
+    public class MachineDataViewModel : IMapFrom<MachineDataServiceModel>
     {
         public int Id { get; set; }
 
@@ -22,8 +26,12 @@
         [Required]
         public int Web1Id { get; set; }
 
+        public string Web1Name { get; set; }
+
         [Required]
         public int Web2Id { get; set; }
+
+        public string Web2Name { get; set; }
 
         [Required]
         [Range(0, DataConstants.MaxProductionFactor)]
@@ -33,10 +41,6 @@
         [Range(0, DataConstants.MaxBaseSpeed)]
         public int BaseSpeed { get; set; }
 
-        public WebSize Web1 { get; set; }
-
-        public WebSize Web2 { get; set; }
-
-        public List<Component> Components { get; set; } = new List<Component>();
+        public IList<SelectListItem> WebSizes { get; set; } = new List<SelectListItem>();
     }
 }

@@ -28,7 +28,7 @@
         {
             <tr>
                 <td>@paper.Name</td>
-                <td>@($"{paper.Grammage:F1}") гр.</td>
+                <td>@($"{paper.Grammage:N1}") гр.</td>
                 <td><input disabled="disabled" type="checkbox" @(paper.IsActive ? "checked" : string.Empty)></td>
                 <td>
                     <a asp-action="EditPaperType" asp-route-id="@paper.Id" style="width: 130px" class="btn btn-default">Edit Paper</a>

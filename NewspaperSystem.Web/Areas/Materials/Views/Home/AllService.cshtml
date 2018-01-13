@@ -30,10 +30,10 @@
         {
             <tr>
                 <td>@(String.Format("{0:dd MMM yyyy}", service.Date))</td>
-                <td>@($"{service.PlateExposing:F2}") лв. </td>
-                <td>@($"{service.MachineSetup:F2}") лв. </td>
-                <td>@($"{service.Impression:F3}") лв. </td>
-                <td>@($"{service.Packing:F3}") лв. </td>
+                <td>@($"{service.PlateExposing:N2}") лв. </td>
+                <td>@($"{service.MachineSetup:N2}") лв. </td>
+                <td>@($"{service.Impression:N3}") лв. </td>
+                <td>@($"{service.Packing:N3}") лв. </td>
                 <td>
                     <a asp-action="EditService" asp-route-id="@service.Id" style="width: 130px" class="btn btn-default">Edit Record</a>
                     <a>&emsp;</a>

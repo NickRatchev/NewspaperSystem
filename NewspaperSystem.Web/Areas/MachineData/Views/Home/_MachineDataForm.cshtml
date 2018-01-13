@@ -1,0 +1,55 @@
+﻿@model MachineDataViewModel
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NumberOfPages">Number Of Pages</label>
+                <input asp-for="NumberOfPages" class="form-control" requred />
+                <span asp-validation-for="NumberOfPages" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M1NumberOfPages">M1 Number Of Pages</label>
+                <input asp-for="M1NumberOfPages" class="form-control" />
+                <span asp-validation-for="M1NumberOfPages" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Web1Id">M1 Web Size</label>
+                <select asp-for="Web1Id" asp-items="Model.WebSizes" class="form-control"></select>
+                <span asp-validation-for="Web1Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M2NumberOfPages">M2 Number Of Pages</label>
+                <input asp-for="M2NumberOfPages" class="form-control" />
+                <span asp-validation-for="M2NumberOfPages" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Web2Id">M2 Web Size</label>
+                <select asp-for="Web2Id" asp-items="Model.WebSizes" class="form-control"></select>
+                <span asp-validation-for="Web2Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductionFactor">Production Factor</label>
+                <input asp-for="ProductionFactor" type="number" class="form-control" min="1" max="@DataConstants.MaxProductionFactor" step="1" />
+                <span asp-validation-for="ProductionFactor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BaseSpeed">Base Speed</label>
+                <input asp-for="BaseSpeed" type="number" class="form-control" min="0" max="@DataConstants.MaxBaseSpeed" step="100" />
+                <span asp-validation-for="BaseSpeed" class="text-danger"></span>
+            </div>
+            <br />
+            <br />
+            <button type="submit" class="col-md-5 btn btn-primary btn-lg">@ViewData["SubmitButton"]</button>
+            <a class="col-md-2">&emsp;</a>
+            <a asp-action="@ViewData["CancelAction"]" class="col-md-5 btn btn-default btn-lg">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

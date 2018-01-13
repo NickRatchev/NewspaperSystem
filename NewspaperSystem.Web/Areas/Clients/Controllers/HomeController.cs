@@ -69,11 +69,6 @@
                 return View(model);
             }
 
-            var town = new TownViewModel()
-            {
-                Name = model.Name
-            };
-
             var success = await this.clients.EditTownAsync(
                 id,
                 model.Name);
@@ -317,7 +312,7 @@
         {
             var product = await this.clients.GetProductByIdAsync(id);
 
-            if (product==null)
+            if (product == null)
             {
                 return NotFound();
             }
@@ -350,12 +345,55 @@
             return RedirectToAction("AllProductsClient", new { id = model.ClientId });
         }
 
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            var product = await this.clients.GetProductByIdAsync(id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(new ProductDeleteViewModel()
+            {
+                Id = id,
+                ClientId = product.ClientId
+            });
+        }
+
+        public async Task<IActionResult> DestroyProduct(int id)
+        {
+            var product = await this.clients.GetProductByIdAsync(id);
+
+            var productIsUsed = await this.clients.ProductIsUsedAsync(id);
+
+            if (productIsUsed)
+            {
+                this.TempData["SuccessMessage"] =
+                    $"Client \"{product.Title}\" is used and cannot be deleted!";
+
+                return RedirectToAction(nameof(AllClient));
+            }
+
+            var success = await this.clients.DeleteProductAsync(id);
+
+            if (!success)
+            {
+                return NotFound();
+            }
+
+            this.TempData["SuccessMessage"] =
+                $"Product \"{product.Title}\" was deleted!";
+
+            return RedirectToAction(nameof(AllClient));
+        }
 
         #endregion
 
         private async Task<IList<SelectListItem>> GetAllTownsAsync()
         {
-            var allTowns = await this.clients.AllTownsAsync();
+            var allTowns = await this.clients
+                .AllTownsAsync();
 
             var result = allTowns
                 .Select(pt => new SelectListItem()

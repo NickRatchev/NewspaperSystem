@@ -14,7 +14,5 @@
         [Required]
         [StringLength(DataConstants.TownNameMaxLength, MinimumLength = DataConstants.TownNameMinLength)]
         public string Name { get; set; }
-
-        public List<Client> Clients { get; set; }
     }
 }

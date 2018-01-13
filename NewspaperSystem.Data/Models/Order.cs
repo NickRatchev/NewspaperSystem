@@ -32,6 +32,9 @@
         public int OrderCalcId { get; set; }
 
 
+        // To Do - Total Production time
+
+
         public Product Product { get; set; }
 
         public Client Client { get; set; }

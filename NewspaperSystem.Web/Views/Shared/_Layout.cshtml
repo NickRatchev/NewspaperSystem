@@ -37,7 +37,7 @@
                         @*<li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>*@
 
                         @if (User.IsInRole(WebConstants.AdministratorRole) ||
-                             User.IsInRole(WebConstants.RegularUserRole))
+User.IsInRole(WebConstants.RegularUserRole))
                         {
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -53,6 +53,16 @@
 
                         @if (User.IsInRole(WebConstants.AdministratorRole))
                         {
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    MACHINE DATA
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a asp-area="MachineData" asp-controller="Home" asp-action="AllMachineData"><b>Machine Data</b></a></li>
+                                    <li><a asp-area="MachineData" asp-controller="Home" asp-action="AllWebSizes"><b>Web Sizes</b></a></li>
+                                </ul>
+                            </li>
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                     MATERIALS

@@ -80,7 +80,7 @@
         {
             return await this.db
                 .WebSizes
-                .AnyAsync(ws => ws.Id == id && ws.MachineDatas.Any());
+                .AnyAsync(ws => ws.MachineDatas1.Any() || ws.MachineDatas2.Any());
         }
 
         public async Task<bool> DeleteWebSizeAsync(int id)
@@ -110,8 +110,8 @@
             var result = await this.db
                 .MachineDatas
                 .OrderBy(md => md.NumberOfPages)
-                .ThenBy(md => md.M1NumberOfPages)
                 .ThenBy(md => md.M2NumberOfPages)
+                .ThenBy(md => md.M1NumberOfPages)
                 .ProjectTo<MachineDataServiceModel>()
                 .ToListAsync();
 
@@ -197,7 +197,7 @@
                 .MachineDatas
                 .FirstOrDefaultAsync(md => md.Id == id);
 
-            if (machineData==null)
+            if (machineData == null)
             {
                 return false;
             }

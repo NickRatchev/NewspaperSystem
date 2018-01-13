@@ -1,6 +1,8 @@
 ﻿namespace NewspaperSystem.Services.Clients.Models
 {
-    public class ProductServiceModel
+    using Common.Mapping;
+    using Data.Models;
+    public class ProductServiceModel : IMapFrom<Product>
     {
         public int Id { get; set; }
 

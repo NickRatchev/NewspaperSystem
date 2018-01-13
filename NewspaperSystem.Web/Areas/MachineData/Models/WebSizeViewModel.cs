@@ -1,9 +1,11 @@
-﻿namespace NewspaperSystem.Data.Models
+﻿namespace NewspaperSystem.Web.Areas.MachineData.Models
 {
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Common.Mapping;
+    using Data;
+    using NewspaperSystem.Services.MachineData.Models;
 
-    public class WebSize
+    public class WebSizeViewModel : IMapFrom<WebSizeServiceModel>
     {
         public int Id { get; set; }
 
@@ -14,9 +16,5 @@
         [Required]
         [Range(DataConstants.MinWebWidth, DataConstants.MaxWebWidth)]
         public int WebWidth { get; set; }       // mm
-
-        public List<MachineData> MachineDatas1 { get; set; } = new List<MachineData>();
-
-        public List<MachineData> MachineDatas2 { get; set; } = new List<MachineData>();
     }
 }

@@ -7,7 +7,7 @@
 
 @if (TempData["SuccessMessage"] != null)
 {
-<h2 class="text-capitalize">@TempData["SuccessMessage"]</h2>
+    <h2 class="text-capitalize">@TempData["SuccessMessage"]</h2>
 }
 
 <br /><br />
@@ -24,11 +24,11 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var product in Model.Products)
-        {
+    @foreach (var product in Model.Products)
+    {
         <tr>
             <th>@($"{product.Title}")</th>
-            <td>@($"{product.DefaultDiscount:F4}")</td>
+            <td>@($"{product.DefaultDiscount:N4}")</td>
             <th><input disabled="disabled" type="checkbox" @(product.IsActive ? "checked" : string.Empty)></th>
             <td>
                 <a asp-action="EditProduct" asp-route-id="@product.Id" style="width: 110px" class="btn btn-default">Edit</a>
@@ -36,9 +36,12 @@
                 <a asp-action="DeleteProduct" asp-route-id="@product.Id" style="width: 110px" class="btn btn-danger">Delete</a>
             </td>
         </tr>
-        }
+    }
     </tbody>
 </table>
+
+<a class="btn btn-primary btn-lg" asp-area="Clients" asp-controller="Home" asp-action="AllClient">Back To Clients</a>
+
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")

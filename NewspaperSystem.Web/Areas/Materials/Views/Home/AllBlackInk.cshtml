@@ -29,9 +29,9 @@
         {
             <tr>
                 <td>@(String.Format("{0:dd MMM yyyy}", material.Date))</td>
-                <td>@($"{material.Price:F2}") лв. </td>
-                <td>@($"{material.SafetyMargin:F2}") % </td>
-                <td>@($"{material.Price * (1 + material.SafetyMargin / 100):F2}") лв. </td>
+                <td>@($"{material.Price:N2}") лв. </td>
+                <td>@($"{material.SafetyMargin:N2}") % </td>
+                <td>@($"{material.Price * (1 + material.SafetyMargin / 100):N2}") лв. </td>
                 <td>
                     <a asp-action="EditBlackInk" asp-route-id="@material.Id" style="width: 130px" class="btn btn-default">Edit Record</a>
                     <a>&emsp;</a>

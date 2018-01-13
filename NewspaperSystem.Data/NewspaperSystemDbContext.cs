@@ -124,14 +124,14 @@
             builder
                 .Entity<MachineData>()
                 .HasOne(md => md.Web1)
-                .WithMany()
+                .WithMany(ws => ws.MachineDatas1)
                 .HasForeignKey(md => md.Web1Id)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .Entity<MachineData>()
                 .HasOne(md => md.Web2)
-                .WithMany()
+                .WithMany(ws => ws.MachineDatas2)
                 .HasForeignKey(md => md.Web2Id)
                 .OnDelete(DeleteBehavior.Restrict);
 

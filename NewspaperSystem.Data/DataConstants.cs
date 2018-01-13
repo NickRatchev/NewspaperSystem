@@ -39,6 +39,7 @@
 
         public const int MaxNumberOfPages = 128;
         public const int MaxProductionFactor = 32;
+        public const int MaxBaseSpeed = 100000;
 
 
     }

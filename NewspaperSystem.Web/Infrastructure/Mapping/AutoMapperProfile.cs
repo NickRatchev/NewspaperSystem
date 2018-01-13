@@ -3,10 +3,10 @@
     using AutoMapper;
     using System;
     using System.Linq;
-    using Areas.Clients.Models;
     using Common.Mapping;
     using Data.Models;
     using NewspaperSystem.Services.Clients.Models;
+    using NewspaperSystem.Services.MachineData.Models;
 
     public class AutoMapperProfile : Profile
     {
@@ -54,6 +54,10 @@
 
             this.CreateMap<Product, ProductServiceModel>()
                 .ForMember(ps => ps.ClientName, cfg => cfg.MapFrom(p => p.Client.CompanyName));
+
+            this.CreateMap<MachineData, MachineDataServiceModel>()
+                .ForMember(ps => ps.Web1Name, cfg => cfg.MapFrom(p => p.Web1.WebName))
+                .ForMember(ps => ps.Web2Name, cfg => cfg.MapFrom(p => p.Web2.WebName));
         }
     }
 }

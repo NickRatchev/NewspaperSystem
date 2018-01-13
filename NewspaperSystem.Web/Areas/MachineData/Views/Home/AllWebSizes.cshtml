@@ -1,0 +1,50 @@
+﻿@model IEnumerable<WebSizeServiceModel>
+@{
+    ViewData["Title"] = "Manage Web Sizes";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <h2 class="text-danger">@TempData["SuccessMessage"]</h2>
+}
+
+<br /><br />
+<a class="btn btn-primary btn-lg" asp-area="MachineData" asp-controller="Home" asp-action="AddWebSize">Add New Web Size</a>
+<br /><br /><br />
+
+<table class="table table-hover table-responsive">
+
+    <colgroup>
+        <col span="1" style="width: 20%;">
+        <col span="1" style="width: 20%;">
+        <col span="1" style="width: 60%;">
+    </colgroup>
+
+    <thead>
+        <tr style="background: rgb(215, 235, 255)">
+            <th>Web Size Name</th>
+            <th>Web Width</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var webSize in Model)
+        {
+            <tr>
+                <th>@($"{webSize.WebName}")</th>
+                <td>@($"{webSize.WebWidth:N0}") mm </td>
+                <td>
+                    <a asp-action="EditWebSize" asp-route-id="@webSize.Id" style="width: 130px" class="btn btn-default">Edit Web Size</a>
+                    <a>&emsp;</a>
+                    <a asp-action="DeleteWebSize" asp-route-id="@webSize.Id" style="width: 130px" class="btn btn-danger">Delete Web Size</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

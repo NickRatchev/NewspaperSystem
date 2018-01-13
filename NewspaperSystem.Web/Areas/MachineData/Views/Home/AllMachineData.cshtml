@@ -1,0 +1,68 @@
+﻿@model IEnumerable<MachineDataServiceModel>
+@{
+    ViewData["Title"] = "Manage Machine Data";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <h2 class="text-danger">@TempData["SuccessMessage"]</h2>
+}
+
+<br /><br />
+<a class="btn btn-primary btn-lg" asp-area="MachineData" asp-controller="Home" asp-action="AddMachineData">Add New Machine Data</a>
+<br /><br /><br />
+
+<table style="text-align: center" class="table table-hover table-responsive">
+
+    <colgroup>
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 15%;">
+        <col span="1" style="width: 15%;">
+    </colgroup>
+
+    <thead>
+        <tr style="background: rgb(215, 235, 255)">
+            <th style="text-align: center">Number Of Pages</th>
+            <th style="text-align: center">M1 Number Of Pages</th>
+            <th style="text-align: center">M1 Web Size</th>
+            <th style="text-align: center">M2 Number Of Pages</th>
+            <th style="text-align: center">M2 Web Size</th>
+            <th style="text-align: center">Production Factor</th>
+            <th style="text-align: center">Base Speed</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody style="text-align: center">
+        @foreach (var machineData in Model)
+        {
+            <tr>
+                <td>@($"{machineData.NumberOfPages:N0}")</td>
+                <td>@($"{machineData.M1NumberOfPages:N0}")</td>
+                <td>@($"{machineData.Web1Name}")</td>
+                <td>@($"{machineData.M2NumberOfPages:N0}")</td>
+                <td>@($"{machineData.Web2Name}")</td>
+                <td>@($"{machineData.ProductionFactor:N0}")</td>
+                <td>@($"{machineData.BaseSpeed:N0}")</td>
+                <td>
+                    <a asp-action="EditMachineData" asp-route-id="@machineData.Id" style="width: 130px" class="btn btn-default">Edit Record</a>
+                </td>
+                <td>
+                    <a asp-action="DeleteMachineData" asp-route-id="@machineData.Id" style="width: 130px" class="btn btn-danger">Delete Record</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
